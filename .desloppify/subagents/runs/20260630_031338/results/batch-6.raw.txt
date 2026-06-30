@@ -1,0 +1,75 @@
+﻿{
+  "batch": "abstraction_fitness",
+  "batch_index": 6,
+  "assessments": {
+    "abstraction_fitness": 95.0
+  },
+  "dimension_notes": {
+    "abstraction_fitness": {
+      "evidence": [
+        "cn() utility in src/lib/utils.ts composes clsx and twMerge into a single call point — a standard shadcn/ui pattern that reduces boilerplate across all component files; classified as a pass-through wrapper by scan but is an earned, widely recognized abstraction",
+        "Button component in src/components/ui/button.tsx uses class-variance-authority to declare variant/size variants centrally, avoiding repetitive className construction at every call site — the abstraction is earned",
+        "Card component in src/App.tsx is a focused presentational component with direct rendering — no prop forwarding or pass-through layers; it takes value/label/color props and renders a styled div directly",
+        "Scene interface in src/App.tsx provides type safety for the 6 scene objects in the scenes array, ensuring every object has required fields; however the interface has only one implementation pattern with no polymorphic substitution pressure",
+        "No delegation-heavy classes, facade modules, typed dict violations, wide parameter bags, or cross-feature wrapper chains detected — all mechanical indicators for negative patterns are at zero",
+        "The single_use finding (src/assets/logo.svg) is an asset file, not a code abstraction — inlining a 48-line SVG into App.tsx would reduce maintainability, not improve it; this concern is dismissed for abstraction_fitness"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The Scene interface, while providing valuable type safety across 6 scene objects, has exactly one implementation pattern with no polymorphic substitution pressure — it is a borderline case of one-implementation interface ceremony. Additionally, the codebase is very small (4 source files, ~479 LOC), limiting the observable abstraction layer depth and making it difficult to assess long-term abstraction discipline.",
+      "sub_axes": {
+        "abstraction_leverage": 95.0,
+        "indirection_cost": 98.0,
+        "interface_honesty": 92.0,
+        "delegation_density": 100.0,
+        "definition_directness": 100.0,
+        "type_discipline": 95.0
+      }
+    }
+  },
+  "dimension_judgment": {
+    "abstraction_fitness": {
+      "dimension_character": "The codebase employs abstractions sparingly and deliberately. The cn utility, Button component with CVA variants, and Card component are all earned abstractions that reduce boilerplate or centralize styling logic without adding indirection. The Scene interface provides useful type safety for structured scene data, though it lacks polymorphic usage pressure and borders on one-implementation ceremony. Overall the codebase respects its small size and avoids the common trap of premature abstraction — every abstraction that exists serves a clear, concrete purpose, and no cross-feature wrapper chains or delegation-heavy patterns are present.",
+      "score_rationale": "The codebase scores high on abstraction fitness because all existing abstractions are earned and add tangible value. There are no pass-through wrappers beyond the standard cn utility (which is an earned shadcn/ui pattern), no delegation-heavy classes, no facade modules, and no wide parameter bags. The sole minor concern is the Scene interface having a single implementation with no substitution pressure, but this is offset by the genuine type-safety benefit it provides across 6 scene objects and the fact that it is isolated (not a widespread pattern). The score reflects a disciplined approach to abstraction appropriate for the codebase's small scale."
+    }
+  },
+  "issues": [],
+  "retrospective": {
+    "root_causes": [],
+    "likely_symptoms": [],
+    "possible_false_positives": [
+      "single_use::src/assets/logo.svg"
+    ]
+  },
+  "context_updates": {
+    "abstraction_fitness": {
+      "add": [
+        {
+          "header": "Earned cn utility wrapping clsx+twMerge",
+          "description": "The cn() function in src/lib/utils.ts is the standard shadcn/ui pattern composing clsx and twMerge into a single call point. It is earned because every component file benefits from not repeating the composition, and the pattern is immediately recognized by developers familiar with the ecosystem.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Button component uses CVA for variant declaration",
+          "description": "Button component centralizes button variants and sizes via class-variance-authority (buttonVariants CVA call), avoiding repetitive inline className construction. The abstraction is earned — it simplifies usage while keeping all styling logic in one discoverable place.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Scene interface is single-implementation but provides value",
+          "description": "The Scene interface (lines 7-15 in App.tsx) defines the shape of 6 scene objects with 7 fields each, providing compile-time field validation. While there is only one implementation and no polymorphic substitution, the type safety it provides prevents malformed scene objects — it is earned ceremony rather than pure overhead.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "No problematic abstraction patterns detected",
+          "description": "The codebase has zero delegation-heavy classes, zero facade modules, zero typed dict violations, zero wide parameter bags, and zero cross-feature wrapper chains. All mechanical negative indicators are at zero, confirming the codebase avoids common abstraction pitfalls.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

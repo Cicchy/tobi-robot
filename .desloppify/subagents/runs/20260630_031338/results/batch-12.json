@@ -1,0 +1,45 @@
+﻿{
+  "batch": "authorization_consistency",
+  "batch_index": 12,
+  "assessments": {"authorization_consistency": 100.0},
+  "dimension_notes": {
+    "authorization_consistency": {
+      "evidence": [
+        "The codebase contains 4 production source files (App.tsx, main.tsx, components/ui/button.tsx, lib/utils.ts) and 1 CSS file — no API route handlers exist, no server-side code, no database access",
+        "No auth middleware, decorators, or guards are present anywhere in the codebase — there are zero route handlers to apply them to",
+        "No Supabase clients, RLS policies, permission strings, or role-based access control patterns appear in any source file",
+        "The grep for auth-related patterns (useAuth, getServerSession, requireAuth, verifyToken, Supabase, createClient, middleware) returned zero matches across src/",
+        "No user-input endpoints exist — the app is a read-only static marketing page with no forms, no POST handlers, and no API calls",
+        "The codebase has no database tables, so RLS consistency between sibling tables is not applicable"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    }
+  },
+  "dimension_judgment": {
+    "authorization_consistency": {
+      "dimension_character": "This is a static marketing landing page with no authentication or authorization machinery whatsoever. Route handlers, API endpoints, databases, and permission systems are entirely absent, so the patterns this dimension evaluates — inconsistent middleware, RLS gaps, magic permission literals, mixed trust boundaries — cannot exist. The codebase is inherently consistent by virtue of having no auth concerns to be inconsistent about.",
+      "score_rationale": "A score of 100.0 reflects that zero authorization inconsistencies exist in this codebase. No route handlers have missing auth decorators, no sibling endpoints disagree on trust boundaries, no permission strings (literal or constant) appear anywhere, and no service-role bypass paths exist without audit logging. The entire site qualifies as a public/unauthenticated route (matching the 'skip' guidance for documented public pages), so no auth patterns are expected or missing."
+    }
+  },
+  "issues": [],
+  "retrospective": {
+    "root_causes": [],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "authorization_consistency": {
+      "add": [
+        {
+          "header": "Static landing page — no auth machinery present",
+          "description": "The codebase is a pure static marketing site (React + Vite + Tailwind) with zero API routes, zero server-side code, zero database access, and zero authentication/authorization patterns. This is appropriate for a brochure/landing page and means the authorization_consistency dimension evaluates to a clean slate — no inconsistencies to find because no auth exists.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

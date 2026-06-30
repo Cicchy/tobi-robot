@@ -1,0 +1,141 @@
+﻿{
+  "batch": "design_coherence",
+  "batch_index": 17,
+  "assessments": {
+    "design_coherence": 72.0
+  },
+  "dimension_notes": {
+    "design_coherence": {
+      "evidence": [
+        "App.tsx: 50 hardcoded hex colors used as Tailwind arbitrary values (text-[#2d8c47], bg-[#e54833]) while the scene.color field already partially drives colors, creating an inconsistent color strategy",
+        "App.tsx lines 28-212: scenes array defines leftPanel, rightPanel, and content as full inline JSX, mixing data definition with presentation (185 of 407 lines are scene data JSX)",
+        "App.tsx lines 318-386: three independent map-over-scenes blocks for left panel, center content, and right panel with nearly identical absolute-positioned wrappers and transition logic",
+        "App.tsx contains Card (helper), Hero (independent component with state/effects), and App in a single file — three React components with distinct responsibilities",
+        "button.tsx uses cva for clean variant definitions with consistent pattern across variant/size axes",
+        "index.css uses CSS custom properties for theme tokens (colors, shadows, fonts) creating a centralized visual design system"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "sub_axes": {}
+    }
+  },
+  "dimension_judgment": {
+    "design_coherence": {
+      "dimension_character": "The codebase has solid foundational patterns — cva-driven button variants, CSS theme tokens, and a clean project skeleton — but App.tsx (85% of production code) accumulates multiple concerns that blur module boundaries. The scenes data couples presentation with content, color strategy is split between data-driven and hardcoded arbitrary values, and three component definitions in one file erode separation of responsibilities. A new team member would grasp the small components quickly but would need to untangle App.tsx to understand the boundaries.",
+      "score_rationale": "The button and utility code are well-structured examples of earned abstraction, and the CSS theme system is a strong positive. However, App.tsx's mixing of data, presentation, and component definitions across 407 LOC reduces design coherence below what the otherwise clean patterns would suggest. Score 72.0 reflects adequate structural design with clear improvement opportunities that would benefit a new team member's onboarding."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "design_coherence",
+      "identifier": "dc-hardcoded-colors",
+      "summary": "50 hardcoded hex colors used inconsistently — some data-driven, others as Tailwind arbitrary values",
+      "related_files": ["src/App.tsx"],
+      "evidence": [
+        "App.tsx lines 33, 36-39, 44-47: scene.color field drives subtitle badge backgroundColor via style prop",
+        "App.tsx line 55: content text color hardcoded as text-[#2d8c47] instead of deriving from scene.color",
+        "App.tsx line 231: hero accent background hardcoded as bg-[#e54833]",
+        "query.json confirms 50 hardcoded color instances in App.tsx at lines 33, 36-39, 44-47, 63, etc.",
+        "All 6 scenes use the same color in multiple places — the scene.color field exists but is not consistently applied to content text or panel headers"
+      ],
+      "suggestion": "Define all scene accent colors as theme CSS variables or use the scene.color field consistently for all color applications (subtitle badge, content text highlights, panel accents). Replace Tailwind arbitrary values like text-[#2d8c47] with references to the scene data or semantic tokens.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "root_cause_cluster": "hardcoded_values"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "dc-scene-data-coupled-jsx",
+      "summary": "Scene data structure embeds full JSX in leftPanel, rightPanel, and content fields, mixing data with presentation",
+      "related_files": ["src/App.tsx"],
+      "evidence": [
+        "App.tsx lines 28-212: scenes array contains 185 lines where each scene object includes leftPanel (<div className=\"flex flex-col gap-3 h-full\"><Card .../></div>), rightPanel (same structure), and content (<div className=\"space-y-4...\">) as JSX expressions",
+        "Every scene follows the same structural pattern (Card calls with value/label/color, specific layout divs) but the pattern is duplicated inline rather than data-driven",
+        "A developer adding a new scene must copy-paste the same JSX structure with only text/color diffs"
+      ],
+      "suggestion": "Extract scene panel rendering into a data-driven approach: define scene data as plain objects (title, subtitle, color, cards: [{value, label}]), then render cards from that data with a shared SceneCardList component. This separates data from presentation and reduces the scenes array to ~60 lines of pure config.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "root_cause_cluster": "data_presentation_mixing"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "dc-repeated-panel-rendering",
+      "summary": "Three near-identical scene panel render loops for left, center, and right panels in App.tsx",
+      "related_files": ["src/App.tsx"],
+      "evidence": [
+        "App.tsx lines 318-336: left panel renders scenes.map() with absolute-positioned divs, opacity/transform transitions, pointerEvents logic, scroll-down animation mask",
+        "App.tsx lines 339-364: center panel renders scenes.map() with same absolute-positioned divs, opacity/transform transitions, pointerEvents logic, different text layout",
+        "App.tsx lines 367-386: right panel renders scenes.map() with same absolute-positioned divs, opacity/transform transitions, pointerEvents logic, scroll-up animation mask",
+        "Each block differs only in content slot (leftPanel/rightPanel/content), scroll animation class (scroll-down/none/scroll-up), and transform direction (translateY(0.75rem)/translateY(1rem)/translateY(-0.75rem))"
+      ],
+      "suggestion": "Extract a reusable ScenePanel component accepting props: contentSlot, scrollDirection, and translateOffset. The three render blocks would reduce to three <ScenePanel> invocations, eliminating ~60 lines of duplicated map/wrapper/transition boilerplate.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "dc-multiple-components-one-file",
+      "summary": "Three React components (Card, Hero, App) with distinct responsibilities defined in a single file",
+      "related_files": ["src/App.tsx"],
+      "evidence": [
+        "App.tsx lines 17-26: Card component — small presentational helper, but defined inside App.tsx rather than components/",
+        "App.tsx lines 214-262: Hero component — independent landing section with its own useState (showScrollBtn) and useEffect (delayed timer for scroll button), distinct responsibility from the scene carousel",
+        "App.tsx lines 264-405: App component — manages scroll progress, active index, renders Hero + scene carousel + footer",
+        "Hero has separate state lifecycle and could be independently tested if extracted"
+      ],
+      "suggestion": "Extract Hero to src/components/hero.tsx and Card to src/components/ui/card.tsx. This makes module scopes explicit: App owns scroll orchestration, Hero owns the landing section, Card is a reusable presentational component. A new team member can navigate by file name rather than scanning 407 LOC.",
+      "confidence": "medium",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    }
+  ],
+  "retrospective": {
+    "root_causes": [
+      "Rapid prototyping pattern where all code was written in a single component before extraction was considered",
+      "Scene data grew organically from a small array to 185 lines of embedded JSX without refactoring the structure",
+      "Color strategy evolved without a centralized decision — some colors were parameterized via scene.color, others were added as arbitrary values for quick visual tuning"
+    ],
+    "likely_symptoms": [
+      "dc-scene-data-coupled-jsx",
+      "dc-hardcoded-colors"
+    ],
+    "possible_false_positives": [
+      "Co-locating Card in App.tsx could be defended as close-to-use for a simple 8-line component; the real concern is Hero which has its own state"
+    ]
+  },
+  "context_updates": {
+    "design_coherence": {
+      "add": [
+        {
+          "header": "Button component uses cva for clean variants",
+          "description": "button.tsx uses class-variance-authority to define a single buttonVariants call with variant/size axes. This is a positive pattern — variant definitions are discoverable, types are inferred, and JSX stays clean. A new team member can understand all button styles in one place.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "CSS theme tokens via custom properties",
+          "description": "index.css defines --background, --main, --border, --shadow, --radius-base, and spacing tokens as CSS custom properties with dark mode overrides. This creates a centralized visual design system that all components reference, preventing color/sizing drift across the codebase.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "App.tsx accumulates data and presentation",
+          "description": "The scenes array mixes data definition (strings, IDs) with full JSX markup (Card calls, layout divs) across 185 lines in the same file as the scroll orchestration logic and three component definitions. This is the primary design coherence concern — a new team member needs to mentally separate data, presentation, and behavior within a single 407-LOC file.",
+          "settled": false,
+          "positive": false
+        },
+        {
+          "header": "Partial color data-driven approach",
+          "description": "scene.color drives subtitle badge backgrounds but content text and hero accents use hardcoded Tailwind arbitrary values. This halfway data-driven approach adds cognitive overhead — a developer must check whether a color comes from data or is hardcoded. Complete the migration to data-driven or centralized tokens.",
+          "settled": false,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

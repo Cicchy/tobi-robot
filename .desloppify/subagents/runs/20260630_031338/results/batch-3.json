@@ -1,0 +1,147 @@
+﻿{
+  "batch": "convention_outlier",
+  "batch_index": 3,
+  "assessments": {
+    "convention_outlier": 80.0
+  },
+  "dimension_notes": {
+    "convention_outlier": {
+      "evidence": [
+        "src/main.tsx imports use single quotes ('react', './App.tsx') while src/App.tsx uses double quotes (\"react\", \"lucide-react\") - sibling modules in the same directory with inconsistent quote style",
+        "src/components/ui/button.tsx uses import * as React from \"react\" (namespace import) while src/App.tsx and src/main.tsx use named imports like { useState, useEffect, useRef } from \"react\"",
+        "src/App.tsx exports default App while src/lib/utils.ts exports function cn() and src/components/ui/button.tsx exports { Button, buttonVariants } - mixed default vs named export patterns across sibling layers",
+        "All component definitions consistently use PascalCase (App, Hero, Card, Button) and utility functions consistently use camelCase (cn, buttonVariants) - no naming convention drift detected",
+        "All production files use kebab-case or PascalCase filenames (button.tsx, utils.ts, App.tsx, main.tsx) - no file naming outliers",
+        "No __init__.py re-export surfaces or barrel files (TypeScript project) - N/A check passes cleanly",
+        "No mixed type strategies for domain objects: single Scene interface, inline prop types, CVA variant types buttonVariants - consistent type approach",
+        "No sibling behavioral protocol drift: each module serves its defined role (entry point, app component, utility, UI component)"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "Quote style inconsistency between sibling modules, namespace import divergence, and mixed export patterns prevent a higher score despite overall solid convention adherence"
+    }
+  },
+  "dimension_judgment": {
+    "convention_outlier": {
+      "dimension_character": "The codebase follows mainstream React/TypeScript conventions consistently: PascalCase components, camelCase utilities, kebab-case filenames, and a clean Vite project layout. However, three minor convention outliers exist: quote style inconsistency between sibling modules (single vs double quotes), a namespace React import that breaks from the named-import pattern used elsewhere, and mixed default/named export strategies. None of these are severe, but they create small friction points for developers navigating the codebase.",
+      "score_rationale": "Scored 80.0: the codebase is well-organized with strong convention adherence for its size (4 production files, 479 LOC). The quote inconsistency and import style drift are real but minor outliers that a quick formatting pass could resolve. No major convention violations like snake_case in camelCase codebases, mixed type strategies, or behavioral protocol drift were found. The score reflects solid fundamentals with room for tightening consistency."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "convention_outlier",
+      "identifier": "quote-style-inconsistency-src",
+      "summary": "Inconsistent quote style between sibling modules in src/: main.tsx uses single quotes while App.tsx uses double quotes",
+      "related_files": [
+        "src/main.tsx",
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "src/main.tsx line 1: import { StrictMode } from 'react' (single quotes)",
+        "src/main.tsx line 4: import App from './App.tsx' (single quotes)",
+        "src/App.tsx line 1: import { useState, useEffect, useRef, type ReactNode } from \"react\" (double quotes)",
+        "src/App.tsx line 2: import { Button } from \"@/components/ui/button\" (double quotes)",
+        "src/App.tsx line 3: import { ArrowDown } from \"lucide-react\" (double quotes)"
+      ],
+      "suggestion": "Normalize quote style to match project convention: either convert main.tsx to double quotes or App.tsx to single quotes. Easiest fix is to align main.tsx to double quotes via a formatter (Prettier/dprint) run.",
+      "confidence": "high",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "namespace-react-import",
+      "summary": "Namespace import for React in button.tsx while sibling modules use named imports creates an import style island",
+      "related_files": [
+        "src/components/ui/button.tsx",
+        "src/App.tsx",
+        "src/main.tsx"
+      ],
+      "evidence": [
+        "src/components/ui/button.tsx line 4: import * as React from \"react\" (namespace import)",
+        "src/App.tsx lines 1-5: { useState, useEffect, useRef, type ReactNode } from \"react\" (named imports)",
+        "src/main.tsx line 1: { StrictMode } from 'react' (named import)",
+        "React.ComponentProps on line 41 of button.tsx is the sole consumer of the namespace; could be imported as { ComponentProps } instead"
+      ],
+      "suggestion": "Replace import * as React from \"react\" with import { ComponentProps, type ComponentPropsWithoutRef } from \"react\" (or the specific types used), aligning with the named-import convention used by sibling modules.",
+      "confidence": "medium",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "mixed-export-patterns",
+      "summary": "Mixed default and named export patterns: App.tsx uses default export while sibling modules use named exports",
+      "related_files": [
+        "src/App.tsx",
+        "src/lib/utils.ts",
+        "src/components/ui/button.tsx"
+      ],
+      "evidence": [
+        "src/App.tsx line 407: export default App (default export)",
+        "src/lib/utils.ts line 4: export function cn(...) (named export)",
+        "src/components/ui/button.tsx line 56: export { Button, buttonVariants } (named export)",
+        "This is partially conventional (React root components are often default-exported) but diverges from the named-export pattern used by all other modules"
+      ],
+      "suggestion": "Align export strategy: either convert App.tsx to a named export (export { App }) and update main.tsx's import, or accept this as conventional React variance. The latter is simpler and avoids unnecessary churn.",
+      "confidence": "low",
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "retrospective": {
+    "root_causes": [
+      "Codebase is early-stage (4 files, likely scaffolded from a template and then partially modified), so convention drift occurred during iterative edits without a formatting pass",
+      "button.tsx was likely scaffolded from shadcn/ui or similar library template which uses the namespace import convention, while App.tsx and main.tsx were written or modified with a different style"
+    ],
+    "likely_symptoms": [
+      "quote-style-inconsistency-src",
+      "namespace-react-import"
+    ],
+    "possible_false_positives": [
+      "mixed-export-patterns: default export for root app component is a widely accepted React convention and may not warrant 'fixing'"
+    ]
+  },
+  "context_updates": {
+    "convention_outlier": {
+      "add": [
+        {
+          "header": "Consistent PascalCase component naming",
+          "description": "All components (App, Hero, Card, Button) consistently use PascalCase, following standard React/TypeScript convention across the entire codebase. No drift detected.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent kebab-case filenames",
+          "description": "All production source files use kebab-case (button.tsx, utils.ts) or the conventional App.tsx/main.tsx. No file-naming outliers exist.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Standard Vite/React project layout",
+          "description": "The directory structure (components/ui/, lib/, assets/) follows the standard Vite + React + Tailwind boilerplate layout, providing predictable navigation for developers familiar with the ecosystem.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Quote style inconsistency between sibling modules",
+          "description": "main.tsx uses single quotes while App.tsx uses double quotes for imports. Since both files are siblings in src/, this creates a minor but visible inconsistency that suggests the files were written or formatted under different editor configurations.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Namespace React import in button.tsx",
+          "description": "button.tsx uses import * as React while all other modules use named imports from react. This is likely a carryover from a component template/snippet and creates an import style island in the components/ui directory.",
+          "settled": true,
+          "positive": false
+        }
+      ],
+      "settle": [
+        "Consistent PascalCase component naming",
+        "Consistent kebab-case filenames",
+        "Standard Vite/React project layout"
+      ]
+    }
+  }
+}

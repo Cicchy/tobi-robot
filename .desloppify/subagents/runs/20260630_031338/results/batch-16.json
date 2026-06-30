@@ -1,0 +1,85 @@
+﻿{
+  "batch": "initialization_coupling",
+  "batch_index": 16,
+  "assessments": {
+    "initialization_coupling": 100.0
+  },
+  "dimension_notes": {
+    "initialization_coupling": {
+      "evidence": [
+        "Zero import-time side effects: no DB connections, file I/O, or network calls at module scope in any of the 4 production files",
+        "Acyclic import graph: main.tsx -> App.tsx -> button.tsx -> utils.ts, a simple chain with no circular dependencies",
+        "No global singletons or mutable module-level state with ordering concerns across the codebase",
+        "No environment variable reads (process.env / import.meta.env) at module scope in any production file",
+        "Framework bootstrap (createRoot in main.tsx) is correctly isolated to the single entry-point file",
+        "Module-level JSX in scenes array (App.tsx lines 28-212) creates React elements at import time, but this is standard React pattern with no coupling impact at this scale",
+        "buttonVariants config computed at import time via cva() is the standard library usage pattern, not a coupling concern"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "sub_axes": {
+        "abstraction_leverage": 100.0,
+        "indirection_cost": 100.0,
+        "interface_honesty": 100.0,
+        "delegation_density": 100.0,
+        "definition_directness": 100.0,
+        "type_discipline": 100.0
+      }
+    }
+  },
+  "dimension_judgment": {
+    "initialization_coupling": {
+      "dimension_character": "The codebase is a small (479 LOC, 4 files) Vite+React application with a trivially simple acyclic import graph and zero initialization coupling patterns. No global singletons, no import-time side effects, no circular dependencies, and no environment variable reads at module scope exist. The only module-scope work is standard React JSX element creation in the scenes array and a CVA variant configuration call, both of which are harmless conventional patterns.",
+      "score_rationale": "Score is 100.0 because the codebase exhibits zero measurable initialization coupling defects across all six rubric criteria. The import dependency tree is a clean linear chain, there are no boot-order dependencies, no mutable shared state across modules, and all framework bootstrap code is properly isolated to the entry point. This is as clean as a codebase of this size can be from an initialization coupling perspective."
+    }
+  },
+  "issues": [],
+  "retrospective": {
+    "root_causes": [],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "initialization_coupling": {
+      "add": [
+        {
+          "header": "No import-time side effects anywhere",
+          "description": "Zero production files perform DB connections, file I/O, or network calls at module scope. This is a strong positive pattern that keeps initialization order-independent and test-friendly.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Clean acyclic import dependency graph",
+          "description": "The import chain (main.tsx -> App.tsx -> button.tsx -> utils.ts) is a simple linear tree with no cycles, hub modules, or conditional/lazy import patterns that could hide circular init dependencies.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No global mutable singletons",
+          "description": "There are no module-level mutable global objects whose creation order matters across modules. All state is component-scoped via React hooks, eliminating ordering concerns entirely.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Framework bootstrap isolated to entry point",
+          "description": "The createRoot call lives exclusively in src/main.tsx, the single framework entry point. No other module performs framework initialization, keeping boot-order predictable.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No environment variable reads at import time",
+          "description": "No production file reads process.env or import.meta.env at module scope, avoiding the common testing fragility where env-dependent initialization breaks when env vars are absent.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Module-level JSX in scenes array is benign at this scale",
+          "description": "App.tsx evaluates 6 scene objects with embedded JSX at import time (lines 28-212). While this creates React elements at module scope, the scale is small and this is standard React practice; not a coupling concern.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    }
+  }
+}

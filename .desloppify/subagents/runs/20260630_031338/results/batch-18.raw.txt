@@ -1,0 +1,60 @@
+﻿{
+  "batch": "contract_coherence",
+  "batch_index": 18,
+  "assessments": {
+    "contract_coherence": 95.0
+  },
+  "dimension_notes": {
+    "contract_coherence": {
+      "evidence": [
+        "All functions (cn, Button, Hero, App, Card) rely on TypeScript inference for return types; no explicit return type annotation exists that could be a lie",
+        "No docstrings exist anywhere in the codebase, eliminating docstring/signature divergence as a concern",
+        "No functions named with getX prefix exist; no hidden side effects behind getter names",
+        "Export patterns are consistent: named exports in lib/utils.ts (cn), named exports in components/ui/button.tsx (Button, buttonVariants), default export in App.tsx (App), and no exports in entry point main.tsx",
+        "No functions claim to throw or have error contracts; no silent None/null returns found",
+        "Props destructuring in Button correctly separates CVA variant props (variant, size) and asChild from remaining DOM props, preventing attribute leakage onto rendered elements",
+        "useEffect cleanup functions in both Hero and App are correctly returned and match React's void-return contract for cleanup"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The codebase is small (4 files, 479 LOC). While contract coherence is perfect within the existing code, larger modules with async operations, error handling branches, or complex type hierarchies would provide a more rigorous test of contract fidelity. No explicit return type annotations exist (only TypeScript inference), and there are no docstrings that could be validated against signatures. A score of 100 would require demonstrated contract coherence under greater complexity."
+    }
+  },
+  "dimension_judgment": {
+    "contract_coherence": {
+      "dimension_character": "Contract coherence is strong across all four modules: every function's runtime behavior matches its TypeScript signature, export patterns follow predictable React/Vite conventions, and there are no getter-prefixed functions hiding mutations. The codebase is small, but the discipline is clean -- no return type annotation lies, no docstring/signature divergence, and no error contract violations exist.",
+      "score_rationale": "Zero contract violations were found after thorough examination of all functions, their signatures, export patterns, and error contracts. TypeScript inference consistently produces correct return types, props are destructured correctly without attribute leakage, and useEffect lifecycles properly return cleanup functions. The 95.0 score reflects perfect adherence within existing code while acknowledging that the codebase's small scale means complex contract scenarios are not exercised."
+    }
+  },
+  "issues": [],
+  "retrospective": {
+    "root_causes": [],
+    "likely_symptoms": [],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "contract_coherence": {
+      "add": [
+        {
+          "header": "Clean export pattern consistency across modules",
+          "description": "Utilities and components consistently use named exports, while the root App uses a default export. This matches standard React/Vite conventions and gives consumers predictable import paths without surprise.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No hidden side effects behind getter names",
+          "description": "No functions with getX prefix exist anywhere in the codebase. State mutations are confined to directly named hooks (setShowScrollBtn, setCoverProgress, setActiveIndex) with clear intent, reinforcing contract transparency.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "TypeScript inference provides correct contracts",
+          "description": "All functions rely on TypeScript's return type inference, which correctly matches every code path. No explicit return type annotation contradicts runtime behavior, and no function silently returns null/undefined where JSX.Element is expected.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

@@ -1,21 +1,38 @@
-# React + TypeScript + Vite + shadcn/ui
+# TOB-I Web
 
-This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
+Landing page for TOB-I, an open educational robotics platform built in Argentina.
 
-## Adding components
+## Stack
 
-To add components to your app, run the following command:
+- **Vite** (build tool)
+- **React 19** + **TypeScript 6**
+- **Tailwind CSS 4** (utility-first CSS)
+- **shadcn/ui** (component primitives via Ark UI / Shark UI)
+- **Oxlint** (linting)
 
-```bash
-npx shadcn@latest add button
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server with HMR |
+| `npm run build` | Type-check and build for production |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run Oxlint |
+
+## Structure
+
 ```
-
-This will place the ui components in the `src/components` directory.
-
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button"
+src/
+├── App.tsx                    # App shell: scroll orchestration + layout
+├── main.tsx                   # Entry point
+├── index.css                  # Theme tokens + animations
+├── components/
+│   ├── hero.tsx               # Hero section
+│   ├── scene-panel.tsx        # Scene card panels + center content
+│   └── ui/button.tsx          # Button component (shadcn-style)
+├── data/
+│   └── scenes.tsx             # Scene data definitions
+├── lib/
+│   └── utils.ts               # cn() utility
+└── assets/                    # Static assets (logo, robot image)
 ```

@@ -1,14 +1,12 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
-
 import "./index.css"
 import App from "./App.tsx"
-import { ThemeProvider } from "@/components/theme-provider.tsx"
 
-createRoot(document.getElementById("root")!).render(
+const rootEl = document.getElementById("root")
+if (!rootEl) throw new Error("Missing #root element in HTML template")
+createRoot(rootEl).render(
   <StrictMode>
-    <ThemeProvider>
-      <App />
-    </ThemeProvider>
-  </StrictMode>
+    <App />
+  </StrictMode>,
 )

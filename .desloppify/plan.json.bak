@@ -1,0 +1,792 @@
+{
+  "version": 8,
+  "created": "2026-06-30T03:12:55+00:00",
+  "updated": "2026-06-30T03:44:50+00:00",
+  "queue_order": [
+    "review::.::holistic::mid_level_elegance::mle-001",
+    "review::.::holistic::mid_level_elegance::mle-002",
+    "review::.::holistic::mid_level_elegance::mle-003",
+    "review::.::holistic::test_strategy::app-core-untested",
+    "review::.::holistic::test_strategy::button-component-untested",
+    "review::.::holistic::type_safety::app-missing-return-type",
+    "review::.::holistic::type_safety::button-missing-return-type",
+    "review::.::holistic::type_safety::cn-missing-return-type",
+    "review::.::holistic::type_safety::tsconfig-missing-strict-mode",
+    "subjective::convention_outlier",
+    "subjective::cross_module_architecture",
+    "subjective::design_coherence",
+    "subjective::high_level_elegance",
+    "subjective::low_level_elegance",
+    "subjective::mid_level_elegance",
+    "subjective::test_strategy",
+    "subjective::type_safety"
+  ],
+  "deferred": [],
+  "skipped": {
+    "review::.::holistic::convention_outlier::mixed-export-patterns": {
+      "issue_id": "review::.::holistic::convention_outlier::mixed-export-patterns",
+      "kind": "permanent",
+      "reason": null,
+      "note": "React root components conventionally use default exports (App.tsx), while utility/component modules use named exports. This is standard React ecosystem practice.",
+      "attestation": "I have reviewed this triage skip against the code and I am not gaming the score by suppressing a real defect. I have reviewed the export patterns and confirmed this is conventional React variance.",
+      "created_at": "2026-06-30T03:29:17+00:00",
+      "review_after": null,
+      "skipped_at_scan": 2
+    }
+  },
+  "active_cluster": null,
+  "overrides": {
+    "test_coverage::src/App.tsx": {
+      "issue_id": "test_coverage::src/App.tsx",
+      "created_at": "2026-06-30T03:12:55+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-06-30T03:12:55+00:00"
+    },
+    "test_coverage::src/components/ui/button.tsx": {
+      "issue_id": "test_coverage::src/components/ui/button.tsx",
+      "created_at": "2026-06-30T03:12:55+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-06-30T03:12:55+00:00"
+    },
+    "test_coverage::src/main.tsx": {
+      "issue_id": "test_coverage::src/main.tsx",
+      "created_at": "2026-06-30T03:12:55+00:00",
+      "cluster": "auto/test_coverage-untested_module",
+      "updated_at": "2026-06-30T03:12:55+00:00"
+    }
+  },
+  "clusters": {
+    "auto/test_coverage-untested_module": {
+      "name": "auto/test_coverage-untested_module",
+      "description": "Fix 3 test coverage issues",
+      "issue_ids": [
+        "test_coverage::src/App.tsx",
+        "test_coverage::src/components/ui/button.tsx",
+        "test_coverage::src/main.tsx"
+      ],
+      "created_at": "2026-06-30T03:12:55+00:00",
+      "updated_at": "2026-06-30T03:12:55+00:00",
+      "auto": true,
+      "cluster_key": "detector::test_coverage::untested_module",
+      "action": "review test coverage gaps",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "refactor",
+      "execution_policy": "planned_only"
+    },
+    "auto/initial-review": {
+      "name": "auto/initial-review",
+      "description": "Initial review of 20 unscored subjective dimensions",
+      "issue_ids": [],
+      "created_at": "2026-06-30T03:12:55+00:00",
+      "updated_at": "2026-06-30T03:12:55+00:00",
+      "auto": true,
+      "cluster_key": "subjective::unscored",
+      "action": "desloppify review --prepare --dimensions abstraction_fitness,ai_generated_debt,api_surface_coherence,authorization_consistency,contract_coherence,convention_outlier,cross_module_architecture,dependency_health,design_coherence,error_consistency,high_level_elegance,incomplete_migration,initialization_coupling,logic_clarity,low_level_elegance,mid_level_elegance,naming_quality,package_organization,test_strategy,type_safety",
+      "execution_status": "review",
+      "user_modified": false,
+      "action_type": "manual_fix",
+      "execution_policy": "planned_only"
+    }
+  },
+  "superseded": {},
+  "promoted_ids": [],
+  "plan_start_scores": {
+    "strict": 16.9,
+    "overall": 16.9,
+    "objective": 67.5,
+    "verified": 67.5
+  },
+  "refresh_state": {
+    "_subjective_migration_pruned": true,
+    "lifecycle_phase": "plan",
+    "subjective_review_completed_at_scan_count": 2
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-30T03:12:55+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:12:55+00:00",
+      "action": "auto_cluster",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:12:55+00:00",
+      "action": "sync_lifecycle_phase",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "phase": "review_initial"
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:12:55+00:00",
+      "action": "seed_start_scores",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:28:02+00:00",
+      "action": "sync_subjective",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "changes": true
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:28:02+00:00",
+      "action": "review_import_sync",
+      "issue_ids": [],
+      "cluster_name": null,
+      "actor": "system",
+      "note": null,
+      "detail": {
+        "trigger": "review_import",
+        "new_ids": [
+          "review::.::holistic::api_surface_coherence::entry-non-null-assertion",
+          "review::.::holistic::convention_outlier::mixed-export-patterns",
+          "review::.::holistic::convention_outlier::namespace-react-import",
+          "review::.::holistic::convention_outlier::quote-style-inconsistency-src",
+          "review::.::holistic::cross_module_architecture::app-tsx-hub-module",
+          "review::.::holistic::dependency_health::unused-radix-ui-meta",
+          "review::.::holistic::design_coherence::dc-hardcoded-colors",
+          "review::.::holistic::design_coherence::dc-multiple-components-one-file",
+          "review::.::holistic::design_coherence::dc-repeated-panel-rendering",
+          "review::.::holistic::design_coherence::dc-scene-data-coupled-jsx",
+          "review::.::holistic::high_level_elegance::inspo-non-production-directory",
+          "review::.::holistic::high_level_elegance::monolithic-app-component",
+          "review::.::holistic::high_level_elegance::readme-boilerplate-mismatch",
+          "review::.::holistic::high_level_elegance::stale-template-assets",
+          "review::.::holistic::high_level_elegance::unused-font-imports",
+          "review::.::holistic::low_level_elegance::lle-001",
+          "review::.::holistic::low_level_elegance::lle-002",
+          "review::.::holistic::low_level_elegance::lle-003",
+          "review::.::holistic::mid_level_elegance::mle-001",
+          "review::.::holistic::mid_level_elegance::mle-002",
+          "review::.::holistic::mid_level_elegance::mle-003",
+          "review::.::holistic::test_strategy::app-core-untested",
+          "review::.::holistic::test_strategy::button-component-untested",
+          "review::.::holistic::type_safety::app-missing-return-type",
+          "review::.::holistic::type_safety::button-missing-return-type",
+          "review::.::holistic::type_safety::cn-missing-return-type",
+          "review::.::holistic::type_safety::tsconfig-missing-strict-mode"
+        ],
+        "added_to_queue": [
+          "review::.::holistic::api_surface_coherence::entry-non-null-assertion",
+          "review::.::holistic::convention_outlier::mixed-export-patterns",
+          "review::.::holistic::convention_outlier::namespace-react-import",
+          "review::.::holistic::convention_outlier::quote-style-inconsistency-src",
+          "review::.::holistic::cross_module_architecture::app-tsx-hub-module",
+          "review::.::holistic::dependency_health::unused-radix-ui-meta",
+          "review::.::holistic::design_coherence::dc-hardcoded-colors",
+          "review::.::holistic::design_coherence::dc-multiple-components-one-file",
+          "review::.::holistic::design_coherence::dc-repeated-panel-rendering",
+          "review::.::holistic::design_coherence::dc-scene-data-coupled-jsx",
+          "review::.::holistic::high_level_elegance::inspo-non-production-directory",
+          "review::.::holistic::high_level_elegance::monolithic-app-component",
+          "review::.::holistic::high_level_elegance::readme-boilerplate-mismatch",
+          "review::.::holistic::high_level_elegance::stale-template-assets",
+          "review::.::holistic::high_level_elegance::unused-font-imports",
+          "review::.::holistic::low_level_elegance::lle-001",
+          "review::.::holistic::low_level_elegance::lle-002",
+          "review::.::holistic::low_level_elegance::lle-003",
+          "review::.::holistic::mid_level_elegance::mle-001",
+          "review::.::holistic::mid_level_elegance::mle-002",
+          "review::.::holistic::mid_level_elegance::mle-003",
+          "review::.::holistic::test_strategy::app-core-untested",
+          "review::.::holistic::test_strategy::button-component-untested",
+          "review::.::holistic::type_safety::app-missing-return-type",
+          "review::.::holistic::type_safety::button-missing-return-type",
+          "review::.::holistic::type_safety::cn-missing-return-type",
+          "review::.::holistic::type_safety::tsconfig-missing-strict-mode"
+        ],
+        "workflow_injected_ids": [],
+        "triage_injected": false,
+        "triage_injected_ids": [],
+        "triage_deferred": false,
+        "diff_new": 27,
+        "diff_reopened": 0,
+        "diff_auto_resolved": 20,
+        "stale_pruned_from_queue": [],
+        "covered_subjective_pruned_from_queue": [
+          "subjective::abstraction_fitness",
+          "subjective::ai_generated_debt",
+          "subjective::api_surface_coherence",
+          "subjective::authorization_consistency",
+          "subjective::contract_coherence",
+          "subjective::convention_outlier",
+          "subjective::cross_module_architecture",
+          "subjective::dependency_health",
+          "subjective::design_coherence",
+          "subjective::error_consistency",
+          "subjective::high_level_elegance",
+          "subjective::incomplete_migration",
+          "subjective::initialization_coupling",
+          "subjective::logic_clarity",
+          "subjective::low_level_elegance",
+          "subjective::mid_level_elegance",
+          "subjective::naming_quality",
+          "subjective::package_organization",
+          "subjective::test_strategy",
+          "subjective::type_safety"
+        ],
+        "covered_subjective": [
+          "subjective::abstraction_fitness",
+          "subjective::ai_generated_debt",
+          "subjective::api_surface_coherence",
+          "subjective::authorization_consistency",
+          "subjective::contract_coherence",
+          "subjective::convention_outlier",
+          "subjective::cross_module_architecture",
+          "subjective::dependency_health",
+          "subjective::design_coherence",
+          "subjective::error_consistency",
+          "subjective::high_level_elegance",
+          "subjective::incomplete_migration",
+          "subjective::initialization_coupling",
+          "subjective::logic_clarity",
+          "subjective::low_level_elegance",
+          "subjective::mid_level_elegance",
+          "subjective::naming_quality",
+          "subjective::package_organization",
+          "subjective::test_strategy",
+          "subjective::type_safety"
+        ],
+        "stale_sync_injected": [
+          "subjective::convention_outlier",
+          "subjective::cross_module_architecture",
+          "subjective::design_coherence",
+          "subjective::high_level_elegance",
+          "subjective::low_level_elegance",
+          "subjective::mid_level_elegance",
+          "subjective::test_strategy",
+          "subjective::type_safety"
+        ],
+        "stale_sync_pruned": [],
+        "auto_cluster_changes": 0,
+        "import_scores_injected": [],
+        "import_scores_pruned": [],
+        "sync_status": "synced",
+        "sync_message": null
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:28:43+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::api_surface_coherence::entry-non-null-assertion"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Replaced non-null assertion with explicit guard check \u2014 throws descriptive error if #root element is missing",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:28:43+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::api_surface_coherence::entry-non-null-assertion"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Replaced non-null assertion with explicit guard check \u2014 throws descriptive error if #root element is missing",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Replaced non-null assertion with explicit guard check \u2014 throws descriptive error if #root element is missing and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:29:17+00:00",
+      "action": "skip",
+      "issue_ids": [
+        "review::.::holistic::convention_outlier::mixed-export-patterns"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "React root components conventionally use default exports (App.tsx), while utility/component modules use named exports. This is standard React ecosystem practice.",
+      "detail": {
+        "kind": "permanent",
+        "reason": null
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:30:03+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::convention_outlier::namespace-react-import"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Replaced import * as React with named import { type ComponentProps } to align with sibling modules",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:30:03+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::convention_outlier::namespace-react-import"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Replaced import * as React with named import { type ComponentProps } to align with sibling modules",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Replaced import * as React with named import { type ComponentProps } to align with sibling modules and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:30:58+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::convention_outlier::quote-style-inconsistency-src"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Normalized main.tsx imports to double quotes to match App.tsx and sibling modules",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:30:58+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::convention_outlier::quote-style-inconsistency-src"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Normalized main.tsx imports to double quotes to match App.tsx and sibling modules",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Normalized main.tsx imports to double quotes to match App.tsx and sibling modules and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:33:09+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::cross_module_architecture::app-tsx-hub-module"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted Scene interface, Card component, and scenes data array into src/data/scenes.tsx \u2014 reduces App.tsx from 407 to 201 LOC",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:33:09+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::cross_module_architecture::app-tsx-hub-module"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted Scene interface, Card component, and scenes data array into src/data/scenes.tsx \u2014 reduces App.tsx from 407 to 201 LOC",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Extracted Scene interface, Card component, and scenes data array into src/data/scenes.tsx \u2014 reduces App.tsx from 407 to 201 LOC and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:33:39+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::dependency_health::unused-radix-ui-meta"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Removed unused radix-ui meta-package from package.json dependencies",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:33:39+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::dependency_health::unused-radix-ui-meta"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Removed unused radix-ui meta-package from package.json dependencies",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Removed unused radix-ui meta-package from package.json dependencies and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:35:08+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::design_coherence::dc-hardcoded-colors"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Replaced hardcoded text-[#xxx] arbitrary values in scene content with CSS variable var(--scene-color) set dynamically from scene.color \u2014 colors are now consistent and data-driven",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:35:08+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::design_coherence::dc-hardcoded-colors"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Replaced hardcoded text-[#xxx] arbitrary values in scene content with CSS variable var(--scene-color) set dynamically from scene.color \u2014 colors are now consistent and data-driven",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Replaced hardcoded text-[#xxx] arbitrary values in scene content with CSS variable var(--scene-color) set dynamically from scene.color \u2014 colors are now consistent and data-driven and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:36:17+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::design_coherence::dc-multiple-components-one-file"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted Hero component to src/components/hero.tsx \u2014 App.tsx now only contains App and footer",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:36:17+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::design_coherence::dc-multiple-components-one-file"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted Hero component to src/components/hero.tsx \u2014 App.tsx now only contains App and footer",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Extracted Hero component to src/components/hero.tsx \u2014 App.tsx now only contains App and footer and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:37:32+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::low_level_elegance::lle-duplicate-computation"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted progress * (1 + n) into a local variable rawProgress to avoid computing the same expression three times",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:37:57+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::low_level_elegance::lle-001"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted progress * (1 + n) into rawProgress variable to eliminate duplicate computation",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:39:01+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::design_coherence::dc-repeated-panel-rendering"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted three panel render loops into reusable ScenePanel and SceneCenterPanel components",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:39:01+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::design_coherence::dc-repeated-panel-rendering"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted three panel render loops into reusable ScenePanel and SceneCenterPanel components",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Extracted three panel render loops into reusable ScenePanel and SceneCenterPanel components and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:40:24+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::design_coherence::dc-scene-data-coupled-jsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Refactored Scene to use data objects (leftCards/rightCards arrays, SceneContent with description/highlight/buttons) instead of inline JSX \u2014 removed 120+ lines of JSX duplication from scenes data file",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:40:24+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::design_coherence::dc-scene-data-coupled-jsx"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Refactored Scene to use data objects (leftCards/rightCards arrays, SceneContent with description/highlight/buttons) instead of inline JSX \u2014 removed 120+ lines of JSX duplication from scenes data file",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Refactored Scene to use data objects (leftCards/rightCards arrays, SceneContent with description/highlight/buttons) instead of inline JSX \u2014 removed 120+ lines of JSX duplication from scenes data file and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:40:43+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::inspo-non-production-directory"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Removed inspo/ directory entirely from the project root",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:40:43+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::inspo-non-production-directory"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Removed inspo/ directory entirely from the project root",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Removed inspo/ directory entirely from the project root and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:41:00+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::monolithic-app-component"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted Card component logic into scene-panel.tsx, Hero into hero.tsx, scenes data into data/scenes.tsx \u2014 App.tsx reduced from 407 to ~90 LOC focused solely on orchestration and layout",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:41:00+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::monolithic-app-component"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted Card component logic into scene-panel.tsx, Hero into hero.tsx, scenes data into data/scenes.tsx \u2014 App.tsx reduced from 407 to ~90 LOC focused solely on orchestration and layout",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Extracted Card component logic into scene-panel.tsx, Hero into hero.tsx, scenes data into data/scenes.tsx \u2014 App.tsx reduced from 407 to ~90 LOC focused solely on orchestration and layout and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:41:27+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::readme-boilerplate-mismatch"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Rewrote README.md to describe the TOB-I project, stack, scripts, and project structure instead of the default Vite scaffold template",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:41:28+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::readme-boilerplate-mismatch"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Rewrote README.md to describe the TOB-I project, stack, scripts, and project structure instead of the default Vite scaffold template",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Rewrote README.md to describe the TOB-I project, stack, scripts, and project structure instead of the default Vite scaffold template and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:41:48+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::stale-template-assets"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Removed unused react.svg, vite.svg, and hero.png template boilerplate from src/assets/",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:41:48+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::stale-template-assets"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Removed unused react.svg, vite.svg, and hero.png template boilerplate from src/assets/",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Removed unused react.svg, vite.svg, and hero.png template boilerplate from src/assets/ and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:42:07+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::unused-font-imports"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Removed unused Google Fonts (Inter, JetBrains Mono, Outfit) from index.html \u2014 they were not referenced in any CSS",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:42:07+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::high_level_elegance::unused-font-imports"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Removed unused Google Fonts (Inter, JetBrains Mono, Outfit) from index.html \u2014 they were not referenced in any CSS",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Removed unused Google Fonts (Inter, JetBrains Mono, Outfit) from index.html \u2014 they were not referenced in any CSS and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:42:27+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::low_level_elegance::lle-001"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted progress * (1 + n) into rawProgress variable \u2014 eliminates triple computation of the same expression",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:42:27+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::low_level_elegance::lle-001"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted progress * (1 + n) into rawProgress variable \u2014 eliminates triple computation of the same expression",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Extracted progress * (1 + n) into rawProgress variable \u2014 eliminates triple computation of the same expression and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:43:15+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::low_level_elegance::lle-002"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Replaced hardcoded text-[#xxx] arbitrary values with CSS var(--scene-color) set dynamically from scene.color \u2014 colors are now consistently data-driven from the Scene object",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:43:15+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::low_level_elegance::lle-002"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Replaced hardcoded text-[#xxx] arbitrary values with CSS var(--scene-color) set dynamically from scene.color \u2014 colors are now consistently data-driven from the Scene object",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Replaced hardcoded text-[#xxx] arbitrary values with CSS var(--scene-color) set dynamically from scene.color \u2014 colors are now consistently data-driven from the Scene object and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:44:01+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::low_level_elegance::lle-003"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Converted maskImage and bottom inline styles to Tailwind arbitrary values [mask-image:...] and bottom-[clamp(...)], and replaced pointerEvents inline style with pointer-events-none Tailwind utility class",
+      "detail": {}
+    },
+    {
+      "timestamp": "2026-06-30T03:44:02+00:00",
+      "action": "resolve",
+      "issue_ids": [
+        "review::.::holistic::low_level_elegance::lle-003"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Converted maskImage and bottom inline styles to Tailwind arbitrary values [mask-image:...] and bottom-[clamp(...)], and replaced pointerEvents inline style with pointer-events-none Tailwind utility class",
+      "detail": {
+        "status": "fixed",
+        "attestation": "I have actually Converted maskImage and bottom inline styles to Tailwind arbitrary values [mask-image:...] and bottom-[clamp(...)], and replaced pointerEvents inline style with pointer-events-none Tailwind utility class and I am not gaming the score."
+      }
+    },
+    {
+      "timestamp": "2026-06-30T03:44:50+00:00",
+      "action": "done",
+      "issue_ids": [
+        "review::.::holistic::mid_level_elegance::mle-001"
+      ],
+      "cluster_name": null,
+      "actor": "user",
+      "note": "Extracted scroll-activation orchestration into useSceneNavigation hook in src/lib/use-scene-navigation.ts \u2014 App.tsx is now a thin composition layer at ~63 LOC",
+      "detail": {}
+    }
+  ],
+  "epic_triage_meta": {},
+  "commit_log": [],
+  "uncommitted_issues": [
+    "review::.::holistic::api_surface_coherence::entry-non-null-assertion",
+    "review::.::holistic::convention_outlier::namespace-react-import",
+    "review::.::holistic::convention_outlier::quote-style-inconsistency-src",
+    "review::.::holistic::cross_module_architecture::app-tsx-hub-module",
+    "review::.::holistic::dependency_health::unused-radix-ui-meta",
+    "review::.::holistic::design_coherence::dc-hardcoded-colors",
+    "review::.::holistic::design_coherence::dc-multiple-components-one-file",
+    "review::.::holistic::design_coherence::dc-repeated-panel-rendering",
+    "review::.::holistic::design_coherence::dc-scene-data-coupled-jsx",
+    "review::.::holistic::high_level_elegance::inspo-non-production-directory",
+    "review::.::holistic::high_level_elegance::monolithic-app-component",
+    "review::.::holistic::high_level_elegance::readme-boilerplate-mismatch",
+    "review::.::holistic::high_level_elegance::stale-template-assets",
+    "review::.::holistic::high_level_elegance::unused-font-imports",
+    "review::.::holistic::low_level_elegance::lle-001",
+    "review::.::holistic::low_level_elegance::lle-002",
+    "review::.::holistic::low_level_elegance::lle-003"
+  ],
+  "commit_tracking_branch": null,
+  "scan_count_at_plan_start": 1
+}

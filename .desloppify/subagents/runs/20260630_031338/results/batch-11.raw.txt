@@ -1,0 +1,95 @@
+﻿{
+  "batch": "api_surface_coherence",
+  "batch_index": 11,
+  "assessments": {
+    "api_surface_coherence": 92.0
+  },
+  "dimension_notes": {
+    "api_surface_coherence": {
+      "evidence": [
+        "Public API exports 4 total symbols across 3 modules: `App` (default export, App.tsx), `Button` + `buttonVariants` (named exports, button.tsx), `cn` (named export, utils.ts) \u2014 minimal and focused",
+        "All React components use destructured props patterns with TypeScript interfaces (Button has 4 explicit props + spread, Card uses {value, label, color}) \u2014 no positional parameter inconsistency",
+        "No async functions exist anywhere in the codebase \u2014 zero mixed sync/async risk",
+        "No function exceeds 5 explicit parameters \u2014 Button has 4, Card has 3, cn uses rest params",
+        "No overloaded interfaces \u2014 Button's asChild is a Radix Slot pattern (framework-imposed, per skip rule)",
+        "`main.tsx:6` uses `createRoot(document.getElementById('root')!)` with non-null assertion \u2014 if the root element is missing, this throws a runtime TypeError instead of a recoverable error",
+        "Zero JSDoc/TSDoc error contract annotations across all public functions \u2014 error conditions are undocumented"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The non-null assertion in main.tsx's createRoot call bypasses error handling for a missing DOM element, converting a recoverable condition into a runtime crash. Additionally, zero error contract documentation exists anywhere in the API surface \u2014 while many functions are safe UI renderers, the absence of any documented error behavior is a consistency gap.",
+      "sub_axes": {
+        "abstraction_leverage": 90.0,
+        "indirection_cost": 100.0,
+        "interface_honesty": 88.0,
+        "delegation_density": 100.0,
+        "definition_directness": 95.0,
+        "type_discipline": 95.0
+      }
+    }
+  },
+  "dimension_judgment": {
+    "api_surface_coherence": {
+      "dimension_character": "A concise, consistent, and well-typed public API surface across a small codebase. All exports follow clear patterns\u2014React components use destructured props with VariantProps for styling, and utilities use typed parameter lists. The surface is minimal (4 symbols across 3 modules) and avoids overloaded interfaces or mixed sync/async patterns. The only notable weakness is an unchecked non-null assertion at the entry point that silently converts a missing DOM element into a runtime TypeError rather than providing a recoverable error contract.",
+      "score_rationale": "At 92.0, this reflects the codebase's clean API surface: no shape inconsistencies across modules, no overloaded interfaces, no mixed sync/async confusion, and no parameter-count violations. The deduction stems from one concrete defect\u2014the non-null assertion at the application entry boundary (main.tsx:6)\u2014and the systemic absence of error contract documentation, which, while mitigated by the UI-rendering nature of the code, represents a consistency gap against the dimension's rubric."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "api_surface_coherence",
+      "identifier": "entry-non-null-assertion",
+      "summary": "Entry point uses non-null assertion on getElementById, bypassing error contract for missing DOM element",
+      "related_files": [
+        "src/main.tsx"
+      ],
+      "evidence": [
+        "`src/main.tsx:6`: `createRoot(document.getElementById('root')!)` forces a non-null assertion on the DOM lookup",
+        "If the `#root` element is absent (e.g., HTML template change, SSR mismatch, test environment), this produces an unhelpful `TypeError: Cannot read properties of null` instead of a descriptive error",
+        "There is no fallback rendering, error boundary, or console.warn before the crash"
+      ],
+      "suggestion": "Replace the non-null assertion with a check: `const rootEl = document.getElementById('root'); if (!rootEl) throw new Error('Missing #root element in HTML template'); createRoot(rootEl).render(...)` or render a fallback UI explaining the missing mount point",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "root_cause_cluster": "boundary_error_handling"
+    }
+  ],
+  "retrospective": {
+    "root_causes": [
+      "Unchecked assumption that the HTML template always contains a `#root` element, codified as a non-null assertion instead of a defensive check"
+    ],
+    "likely_symptoms": [
+      "entry-non-null-assertion",
+      "missing-error-contracts"
+    ],
+    "possible_false_positives": [
+      "buttonVariants-export-exposure",
+      "asChild-overloaded-interface"
+    ]
+  },
+  "context_updates": {
+    "api_surface_coherence": {
+      "add": [
+        {
+          "header": "Minimal, focused public API surface",
+          "description": "Only 4 symbols exported across 3 modules (App, Button, buttonVariants, cn). Zero shape inconsistencies, zero overloaded interfaces, zero mixed sync/async. The small surface makes the codebase easy to reason about from an API coherence standpoint.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No mixed sync/async anywhere",
+          "description": "The codebase contains zero async functions. This eliminates an entire class of API coherence issues (missing awaits, accidental promise passthrough, sync/async confusion at call sites).",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "shadcn/ui idiomatic dual exports",
+          "description": "Button.tsx follows the standard shadcn/ui pattern of exporting both the component (Button) and its CVA variants config (buttonVariants). This is ecosystem-standard, not an API defect, but it does expose styling implementation detail as public surface.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

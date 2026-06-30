@@ -1,0 +1,76 @@
+﻿{
+  "batch": "cross_module_architecture",
+  "batch_index": 1,
+  "assessments": {
+    "cross_module_architecture": 78.0
+  },
+  "dimension_notes": {
+    "cross_module_architecture": {
+      "evidence": [
+        "Import graph is strictly unidirectional: main.tsx -> App.tsx -> components/ui/button.tsx, lib/utils.ts, assets/*",
+        "App.tsx (407 LOC) contains all 6 scene definitions with inline JSX panels, the Hero component, footer, and scroll-driven state management -- acts as a hub module with mixed data and presentation concerns",
+        "No circular imports or dependency cycles detected across the 4 production files",
+        "Shared utility (cn in lib/utils.ts) is consumed by button.tsx -- expected downstream consumption of a shared boundary",
+        "No cross-module shared mutable state or import-time side effects beyond the standard CSS import in main.tsx",
+        "Package size imbalance: src/App.tsx consumes ~85% of production code (407 of ~479 LOC)"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": "App.tsx acts as a hub module containing scene data, presentation logic, and state management in a single file, creating moderate blast radius"
+    }
+  },
+  "dimension_judgment": {
+    "cross_module_architecture": {
+      "dimension_character": "The codebase has a clean, unidirectional dependency graph with no cycles or layer violations. The primary architectural concern is that App.tsx functions as a hub module (407 LOC, ~85% of production code) combining scene data, UI components, and scroll-driven state management -- creating a moderate blast radius where changes to any aspect of the presentation layer route through this single module.",
+      "score_rationale": "The architecture is fundamentally sound for a project of this size (4 files, 479 LOC): dependency direction is clear, boundaries are respected, and there is no cross-module coordination through shared mutable state. The score of 78 reflects that a new team member would understand the structure in seconds, but is moderated by the App.tsx hub module which blurs the boundary between data/config and presentation."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "app-tsx-hub-module",
+      "summary": "App.tsx (407 LOC) acts as a hub module combining scene data, Hero component, footer, and scroll-driven state management in a single file",
+      "related_files": ["src/App.tsx"],
+      "evidence": [
+        "App.tsx defines 6 scene objects with inline JSX panels and content at module scope (lines 28-212)",
+        "App.tsx contains both the Hero component (lines 214-262) and the App component (lines 264-405)",
+        "Hardcoded color values (e.g. '#e54833', '#3e7ce4', '#f9cc48', '#6a9cf4', '#2d8c47', '#e8751a') appear ~50 times across the component, embedded in JSX rather than extracted to a theme or data config",
+        "App.tsx represents ~85% of production code (407 of ~479 LOC)"
+      ],
+      "suggestion": "Extract the scenes data array and hardcoded color palette into a separate data file (e.g. src/data/scenes.ts or src/data/site-content.ts). This separates configuration/presentation data from rendering logic and reduces the blast radius for content changes.",
+      "confidence": "high",
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    }
+  ],
+  "retrospective": {
+    "root_causes": ["Project is in early/prototype stage where rapid iteration favored monolithic structure over decomposition"],
+    "likely_symptoms": ["app-tsx-hub-module"],
+    "possible_false_positives": []
+  },
+  "context_updates": {
+    "cross_module_architecture": {
+      "add": [
+        {
+          "header": "Clean unidirectional dependency graph",
+          "description": "All imports follow a single direction (entry -> App -> UI/utils/assets) with no cycles or reverse dependencies. This makes the module boundary map trivial for any developer to trace.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "App.tsx hub module with mixed concerns",
+          "description": "407 LOC combining scene data definitions, inline JSX panels, Hero component, and scroll-driven state management. While manageable at current size, it creates a single point of change for data, layout, and interaction logic.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Well-isolated shared boundaries",
+          "description": "The cn() utility in lib/utils.ts and the Button component in components/ui/button.tsx are clean shared boundaries consumed by App.tsx, following standard UI/lib separation patterns.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  }
+}

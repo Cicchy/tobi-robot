@@ -1,0 +1,1536 @@
+{
+  "assessments": {
+    "abstraction_fitness": {
+      "score": 95.0,
+      "components": [
+        "Abstraction Leverage",
+        "Indirection Cost",
+        "Interface Honesty",
+        "Delegation Density",
+        "Definition Directness",
+        "Type Discipline"
+      ],
+      "component_scores": {
+        "Abstraction Leverage": 95.0,
+        "Indirection Cost": 98.0,
+        "Interface Honesty": 92.0,
+        "Delegation Density": 100.0,
+        "Definition Directness": 100.0,
+        "Type Discipline": 95.0
+      }
+    },
+    "ai_generated_debt": 95.0,
+    "api_surface_coherence": 92.0,
+    "authorization_consistency": 100.0,
+    "contract_coherence": 95.0,
+    "convention_outlier": 80.0,
+    "cross_module_architecture": 78.0,
+    "dependency_health": 92.0,
+    "design_coherence": 72.0,
+    "error_consistency": 95.0,
+    "high_level_elegance": 75.0,
+    "incomplete_migration": 100.0,
+    "initialization_coupling": 100.0,
+    "logic_clarity": 95.0,
+    "low_level_elegance": 78.0,
+    "mid_level_elegance": 72.0,
+    "naming_quality": 93.0,
+    "package_organization": 95.0,
+    "test_strategy": 10.0,
+    "type_safety": 75.0
+  },
+  "dimension_notes": {
+    "cross_module_architecture": {
+      "evidence": [
+        "Import graph is strictly unidirectional: main.tsx -> App.tsx -> components/ui/button.tsx, lib/utils.ts, assets/*",
+        "App.tsx (407 LOC) contains all 6 scene definitions with inline JSX panels, the Hero component, footer, and scroll-driven state management -- acts as a hub module with mixed data and presentation concerns",
+        "No circular imports or dependency cycles detected across the 4 production files",
+        "Shared utility (cn in lib/utils.ts) is consumed by button.tsx -- expected downstream consumption of a shared boundary",
+        "No cross-module shared mutable state or import-time side effects beyond the standard CSS import in main.tsx",
+        "Package size imbalance: src/App.tsx consumes ~85% of production code (407 of ~479 LOC)"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": "App.tsx acts as a hub module containing scene data, presentation logic, and state management in a single file, creating moderate blast radius"
+    },
+    "high_level_elegance": {
+      "evidence": [
+        "Project follows Vite + React + TypeScript standard template structure with shadcn/ui conventions (components/ui/, lib/)",
+        "@ path alias configured in vite.config.ts and tsconfig.app.json and used consistently across all imports",
+        "Small public API surface: App (default export), Button/buttonVariants, cn utility",
+        "Single entry point main.tsx -> App.tsx with clean bootstrap pattern",
+        "README.md is the default Vite scaffold template \u2014 no mention of TOB-I project, architecture, or setup",
+        "src/assets/ contains 5 files but only logo.svg and tobi.png are imported in App.tsx; react.svg (tracked) and vite.svg, hero.png (untracked) are stale template artifacts with zero consumers",
+        "inspo/ directory at project root contains downloaded external webpage assets (Neobrutalism components CSS) \u2014 non-production reference material blurring project boundary",
+        "index.html loads Google Fonts (Inter, JetBrains Mono, Outfit) that are never referenced in CSS \u2014 only DM Sans is configured via @theme",
+        "App.tsx is 407 LOC mixing scene data definitions (~185 lines), subcomponents (Card, Hero), and layout orchestration in a single module",
+        "Component decomposition follows consistent React functional component pattern with hooks throughout"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": "None"
+    },
+    "convention_outlier": {
+      "evidence": [
+        "src/main.tsx imports use single quotes ('react', './App.tsx') while src/App.tsx uses double quotes (\"react\", \"lucide-react\") - sibling modules in the same directory with inconsistent quote style",
+        "src/components/ui/button.tsx uses import * as React from \"react\" (namespace import) while src/App.tsx and src/main.tsx use named imports like { useState, useEffect, useRef } from \"react\"",
+        "src/App.tsx exports default App while src/lib/utils.ts exports function cn() and src/components/ui/button.tsx exports { Button, buttonVariants } - mixed default vs named export patterns across sibling layers",
+        "All component definitions consistently use PascalCase (App, Hero, Card, Button) and utility functions consistently use camelCase (cn, buttonVariants) - no naming convention drift detected",
+        "All production files use kebab-case or PascalCase filenames (button.tsx, utils.ts, App.tsx, main.tsx) - no file naming outliers",
+        "No __init__.py re-export surfaces or barrel files (TypeScript project) - N/A check passes cleanly",
+        "No mixed type strategies for domain objects: single Scene interface, inline prop types, CVA variant types buttonVariants - consistent type approach",
+        "No sibling behavioral protocol drift: each module serves its defined role (entry point, app component, utility, UI component)"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "Quote style inconsistency between sibling modules, namespace import divergence, and mixed export patterns prevent a higher score despite overall solid convention adherence"
+    },
+    "error_consistency": {
+      "evidence": [
+        "Zero I/O boundaries across all 4 production files (479 LOC): no network calls, no file system access, no parse operations, no user input processing",
+        "No try/catch blocks, no throw statements, no Result types, no error objects exist anywhere in the codebase",
+        "src/App.tsx (407 LOC) uses DOM APIs (getBoundingClientRect, addEventListener, scrollBy) with appropriate passive listener and guard clause for ref null, but no error handling \u2014 appropriate because these are safe browser DOM operations in a React SPA",
+        "src/main.tsx uses standard React createRoot with non-null assertion on getElementById \u2014 this is idiomatic React boilerplate and falls under the skip rule for intentional top-level handlers",
+        "errors.strategy_by_directory in scan evidence is empty, confirming no error handling strategies detected by mechanical scanners",
+        "All four modules uniformly follow the same implicit strategy: no error handling needed because no operations can meaningfully fail"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "None"
+    },
+    "naming_quality": {
+      "evidence": [
+        "All React components use PascalCase (App, Hero, Card, Button) \u2014 consistent with TypeScript/React conventions",
+        "All functions and variables use camelCase (handleScroll, coverProgress, activeIndex, showScrollBtn) \u2014 consistent with JavaScript conventions",
+        "Interface Scene has clear, domain-relevant fields (id, title, subtitle, color, leftPanel, rightPanel, content)",
+        "cn utility uses the ubiquitous shadcn/ui short-name convention \u2014 identifiable by any modern React developer",
+        "No name/behavior mismatches detected: no getX() that mutates state, no isX() returning non-boolean",
+        "No generic opaque verbs (process, do, run, manage) outside of standard event handler pattern (handleScroll)",
+        "File naming follows expected roles: App.tsx (PascalCase component), main.tsx/button.tsx/utils.ts (lowercase functional)",
+        "Scene.id values are Spanish-language domain identifiers (costo, acceso, experiencia, tecnologia, validacion, cta) matching the content language"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The codebase is very small (4 source files, ~479 LOC), which limits observable naming patterns and makes it difficult to assess long-term consistency. A few names like coverProgress and slideY are slightly opaque without reading surrounding context, but these are minor and within normal range."
+    },
+    "abstraction_fitness": {
+      "evidence": [
+        "cn() utility in src/lib/utils.ts composes clsx and twMerge into a single call point \u2014 a standard shadcn/ui pattern that reduces boilerplate across all component files; classified as a pass-through wrapper by scan but is an earned, widely recognized abstraction",
+        "Button component in src/components/ui/button.tsx uses class-variance-authority to declare variant/size variants centrally, avoiding repetitive className construction at every call site \u2014 the abstraction is earned",
+        "Card component in src/App.tsx is a focused presentational component with direct rendering \u2014 no prop forwarding or pass-through layers; it takes value/label/color props and renders a styled div directly",
+        "Scene interface in src/App.tsx provides type safety for the 6 scene objects in the scenes array, ensuring every object has required fields; however the interface has only one implementation pattern with no polymorphic substitution pressure",
+        "No delegation-heavy classes, facade modules, typed dict violations, wide parameter bags, or cross-feature wrapper chains detected \u2014 all mechanical indicators for negative patterns are at zero",
+        "The single_use finding (src/assets/logo.svg) is an asset file, not a code abstraction \u2014 inlining a 48-line SVG into App.tsx would reduce maintainability, not improve it; this concern is dismissed for abstraction_fitness"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The Scene interface, while providing valuable type safety across 6 scene objects, has exactly one implementation pattern with no polymorphic substitution pressure \u2014 it is a borderline case of one-implementation interface ceremony. Additionally, the codebase is very small (4 source files, ~479 LOC), limiting the observable abstraction layer depth and making it difficult to assess long-term abstraction discipline.",
+      "sub_axes": {
+        "abstraction_leverage": 95.0,
+        "indirection_cost": 98.0,
+        "interface_honesty": 92.0,
+        "delegation_density": 100.0,
+        "definition_directness": 100.0,
+        "type_discipline": 95.0
+      }
+    },
+    "dependency_health": {
+      "evidence": [
+        "`radix-ui` (^1.6.0) is listed as a dependency in package.json but is never imported anywhere in the source code \u2014 the only Radix import is `@radix-ui/react-slot` which is also a separate direct dependency",
+        "`lucide-react` (^1.22.0) is imported solely for a single `<ArrowDown />` icon in src/App.tsx \u2014 a large icon library used for one icon (mitigated by tree-shaking)",
+        "No circular imports detected: import chain is linear (main.tsx -> App.tsx -> button.tsx, utils.ts)",
+        "Dependencies are generally well-matched to the tech stack: React 19, Vite 8, Tailwind CSS v4, shadcn/ui component patterns"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The unused `radix-ui` dependency adds unnecessary weight and complexity to the dependency tree; with only 4 source files and 479 LOC, the dependency set should be leaner"
+    },
+    "low_level_elegance": {
+      "evidence": [
+        "src/App.tsx:285-289 \u2014 scroll handler computes progress * (1 + n) twice (once for cover, once for the if condition) instead of storing the intermediate value in a local variable",
+        "src/App.tsx:28-211 \u2014 scenes array (184 lines, ~45% of file) embeds all scene data inline within the component module, mixing static content with component rendering logic",
+        "src/App.tsx:244 \u2014 Hero component uses inline style={{ maskImage: ..., WebkitMaskImage: ... }} alongside Tailwind utility classes, creating a dual-path styling strategy within the same function body",
+        "src/App.tsx:248 \u2014 Hero scroll button uses inline style={{ bottom: 'clamp(...)' }} for responsive positioning while the rest of the element uses Tailwind classes",
+        "src/App.tsx:28-211 \u2014 Scene colors (#e54833, #3e7ce4, #f9cc48, #6a9cf4, #2d8c47, #e8751a) are hardcoded hex strings rather than referencing CSS custom properties from index.css (e.g., --main: #3e7ce4, --background: #f5efe6)",
+        "src/App.tsx:269-301 \u2014 Scroll handler has clear structure with clamp-based progress calculation and index derivation, but the dataflow (scrollProgress -> coverProgress -> activeIndex) is dense enough to warrant extraction into named sub-functions"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "mid_level_elegance": {
+      "evidence": [
+        "main.tsx \u2192 App.tsx handoff is a model of simplicity: single import, explicit StrictMode wrapper, one render call \u2014 minimal and unsurprising",
+        "Button component exposes a clean, explicit API surface (variant, size, asChild, className + standard button props) with well-typed VariantProps from cva",
+        "All 407 LOC of App.tsx are in one file \u2014 scroll event orchestration, scene state management, scene data, Hero/Card components, and full rendering all tangled in one module with no internal module boundaries",
+        "The scenes[] data array embeds ReactNode directly (leftPanel, rightPanel, content fields are JSX), tightly coupling data model with presentation such that no data-translation boundary exists",
+        "No error boundaries (<ErrorBoundary>), error propagation patterns, or predictable failure-handling mechanism exist across any module seams",
+        "cn() utility in src/lib/utils.ts is a clean single-purpose adapter with typed inputs and predictable output \u2014 a well-defined integration seam",
+        "The @/ path alias (vite.config.ts) provides a consistent import boundary but no behavioral seam logic",
+        "Hero component is defined in App.tsx rather than as a separate module, blurring the conceptual boundary between orchestration and presentation"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "architectural_change",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "test_strategy": {
+      "evidence": [
+        "Zero test files exist anywhere in the codebase - no __tests__ directories, no *.test.* or *.spec.* files found",
+        "src/App.tsx (407 LOC) is the core application with complex scroll-driven state management (coverProgress, activeIndex state), useEffect with passive scroll listener, Hero component with timed setTimeout for scroll button visibility, and data-driven scene rendering - all completely untested",
+        "src/components/ui/button.tsx (56 LOC) is a reusable Button with 4 variants (default, noShadow, neutral, reverse) and 4 sizes (default, sm, lg, icon) used across the application - no unit tests verify variant rendering or className merging",
+        "No test framework or test script is configured in package.json - only dev, build, lint, and preview scripts exist; no vitest, jest, or testing-library dependencies present",
+        "Low-value files (src/main.tsx at 10 LOC bootstrap, src/lib/utils.ts at 6 LOC utility) are appropriately left untested per the skip rubric"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "architectural_change",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "api_surface_coherence": {
+      "evidence": [
+        "Public API exports 4 total symbols across 3 modules: `App` (default export, App.tsx), `Button` + `buttonVariants` (named exports, button.tsx), `cn` (named export, utils.ts) \u2014 minimal and focused",
+        "All React components use destructured props patterns with TypeScript interfaces (Button has 4 explicit props + spread, Card uses {value, label, color}) \u2014 no positional parameter inconsistency",
+        "No async functions exist anywhere in the codebase \u2014 zero mixed sync/async risk",
+        "No function exceeds 5 explicit parameters \u2014 Button has 4, Card has 3, cn uses rest params",
+        "No overloaded interfaces \u2014 Button's asChild is a Radix Slot pattern (framework-imposed, per skip rule)",
+        "`main.tsx:6` uses `createRoot(document.getElementById('root')!)` with non-null assertion \u2014 if the root element is missing, this throws a runtime TypeError instead of a recoverable error",
+        "Zero JSDoc/TSDoc error contract annotations across all public functions \u2014 error conditions are undocumented"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The non-null assertion in main.tsx's createRoot call bypasses error handling for a missing DOM element, converting a recoverable condition into a runtime crash. Additionally, zero error contract documentation exists anywhere in the API surface \u2014 while many functions are safe UI renderers, the absence of any documented error behavior is a consistency gap."
+    },
+    "authorization_consistency": {
+      "evidence": [
+        "The codebase contains 4 production source files (App.tsx, main.tsx, components/ui/button.tsx, lib/utils.ts) and 1 CSS file \u2014 no API route handlers exist, no server-side code, no database access",
+        "No auth middleware, decorators, or guards are present anywhere in the codebase \u2014 there are zero route handlers to apply them to",
+        "No Supabase clients, RLS policies, permission strings, or role-based access control patterns appear in any source file",
+        "The grep for auth-related patterns (useAuth, getServerSession, requireAuth, verifyToken, Supabase, createClient, middleware) returned zero matches across src/",
+        "No user-input endpoints exist \u2014 the app is a read-only static marketing page with no forms, no POST handlers, and no API calls",
+        "The codebase has no database tables, so RLS consistency between sibling tables is not applicable"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "ai_generated_debt": {
+      "evidence": [
+        "Zero comments exist in the codebase (comment ratio 0.0) \u2014 no risk of restating comments",
+        "Zero console.log / console.debug statements in any file \u2014 no nosy debug logging",
+        "Zero docstrings or JSDoc blocks \u2014 no docstring bloat",
+        "The only null check is `if (!sectionRef.current) return` in App.tsx line 271, which is a legitimate guard on a React ref that starts as null",
+        "Zero try-catch blocks or defensive checks on non-nullable typed values",
+        "All identifiers are domain-specific: Hero, Card, Scene, coverProgress, activeIndex, buttonVariants, Button, cn \u2014 no generic names like handleData or processItem",
+        "The `cn` utility in src/lib/utils.ts composes clsx + twMerge \u2014 a standard Tailwind/React ecosystem pattern, not meaningful pass-through debt",
+        "No error handling boilerplate copied across files \u2014 the codebase has no error handling at all, appropriate for a static landing page"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The codebase is small (479 LOC across 4 production files), so the surface area for AI-generated debt patterns is limited. A perfect score would require demonstrating absence of debt patterns at a larger scale where such patterns tend to emerge (e.g., across dozens of files with complex business logic)."
+    },
+    "incomplete_migration": {
+      "evidence": [
+        "All 4 production source files use TypeScript (.tsx/.ts) \u2014 zero .js or .jsx files exist under src/",
+        "All React components are functional components with hooks (useState, useEffect, useRef), no class components found",
+        "No dual-API coexistence: no axios+fetch, no moment+dayjs, no class+functional component mix",
+        "No @deprecated annotations or DEPRECATED markers found anywhere in production source code",
+        "No compatibility shims or stale migration wrappers \u2014 the cn() utility in src/lib/utils.ts is a standard shadcn/ui pattern actively consumed by button.tsx",
+        "Zero TODO/FIXME comments referencing 'migrate', 'legacy', 'old api', or 'remove after'",
+        "Dependencies are modern and single-version: React 19.2.7, TypeScript 6.0.2, Vite 8.1.0 \u2014 no dual-library duplication",
+        "tsconfig.app.json uses ignoreDeprecations: '6.0' and erasableSyntaxOnly: true \u2014 config-level TypeScript 6.0 migration handled declaratively",
+        "All 4 tracked production files are TypeScript \u2014 TypeScript adoption is complete across the entire source surface",
+        "Scan evidence migration_signals is empty, confirming zero mechanical migration signals detected"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "Score is at ceiling \u2014 no incomplete migration issues exist in the codebase"
+    },
+    "package_organization": {
+      "evidence": [
+        "Total production source files: 4 (App.tsx, main.tsx, lib/utils.ts, components/ui/button.tsx) \u2014 well under the <20 threshold where flat structure is appropriate",
+        "No root-level production code files with low fan-in (<5 importers); all root files are framework-imposed config (vite.config.ts, tsconfig*.json, package.json, index.html, components.json, .oxlintrc.json)",
+        "Directory profiles show clean separation: src/ (entry + app), src/lib/ (utilities), src/components/ui/ (reusable components), src/assets/ (static images/svgs)",
+        "Coupling matrix shows expected downstream imports: src/ -> src/assets/ (2 edges), src/ -> src/components/ui/ (1 edge); no reciprocal or bidirectional edges",
+        "No directory exceeds 10 files; src/ has 2 files, assets/ has 5 static assets, lib/ and components/ui/ each have 1 file",
+        "All directory names clearly reflect contained responsibilities: lib/ for utilities, components/ui/ for UI components, assets/ for static resources, public/ for root-relative static files",
+        "Import-affinity is clean: App.tsx imports from assets/ (logo/tobi images) and components/ui/ (Button) \u2014 all within expected domains; main.tsx imports App + index.css \u2014 appropriate for an entry point"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "Score is not 100 because the project is very small (4 files, 479 LOC), so organizational patterns have not been stress-tested at scale. However, within its current scope the structure is ideal and follows framework conventions perfectly. No concrete defects exist."
+    },
+    "initialization_coupling": {
+      "evidence": [
+        "Zero import-time side effects: no DB connections, file I/O, or network calls at module scope in any of the 4 production files",
+        "Acyclic import graph: main.tsx -> App.tsx -> button.tsx -> utils.ts, a simple chain with no circular dependencies",
+        "No global singletons or mutable module-level state with ordering concerns across the codebase",
+        "No environment variable reads (process.env / import.meta.env) at module scope in any production file",
+        "Framework bootstrap (createRoot in main.tsx) is correctly isolated to the single entry-point file",
+        "Module-level JSX in scenes array (App.tsx lines 28-212) creates React elements at import time, but this is standard React pattern with no coupling impact at this scale",
+        "buttonVariants config computed at import time via cva() is the standard library usage pattern, not a coupling concern"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "design_coherence": {
+      "evidence": [
+        "App.tsx: 50 hardcoded hex colors used as Tailwind arbitrary values (text-[#2d8c47], bg-[#e54833]) while the scene.color field already partially drives colors, creating an inconsistent color strategy",
+        "App.tsx lines 28-212: scenes array defines leftPanel, rightPanel, and content as full inline JSX, mixing data definition with presentation (185 of 407 lines are scene data JSX)",
+        "App.tsx lines 318-386: three independent map-over-scenes blocks for left panel, center content, and right panel with nearly identical absolute-positioned wrappers and transition logic",
+        "App.tsx contains Card (helper), Hero (independent component with state/effects), and App in a single file \u2014 three React components with distinct responsibilities",
+        "button.tsx uses cva for clean variant definitions with consistent pattern across variant/size axes",
+        "index.css uses CSS custom properties for theme tokens (colors, shadows, fonts) creating a centralized visual design system"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    },
+    "contract_coherence": {
+      "evidence": [
+        "All functions (cn, Button, Hero, App, Card) rely on TypeScript inference for return types; no explicit return type annotation exists that could be a lie",
+        "No docstrings exist anywhere in the codebase, eliminating docstring/signature divergence as a concern",
+        "No functions named with getX prefix exist; no hidden side effects behind getter names",
+        "Export patterns are consistent: named exports in lib/utils.ts (cn), named exports in components/ui/button.tsx (Button, buttonVariants), default export in App.tsx (App), and no exports in entry point main.tsx",
+        "No functions claim to throw or have error contracts; no silent None/null returns found",
+        "Props destructuring in Button correctly separates CVA variant props (variant, size) and asChild from remaining DOM props, preventing attribute leakage onto rendered elements",
+        "useEffect cleanup functions in both Hero and App are correctly returned and match React's void-return contract for cleanup"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The codebase is small (4 files, 479 LOC). While contract coherence is perfect within the existing code, larger modules with async operations, error handling branches, or complex type hierarchies would provide a more rigorous test of contract fidelity. No explicit return type annotations exist (only TypeScript inference), and there are no docstrings that could be validated against signatures. A score of 100 would require demonstrated contract coherence under greater complexity."
+    },
+    "logic_clarity": {
+      "evidence": [
+        "No identical if/else or ternary branches detected anywhere in the codebase",
+        "No dead code paths found after unconditional returns/breaks",
+        "No always-true or always-false conditions; every branch has a meaningful, reachable state",
+        "The single ref guard `if (!sectionRef.current) return` in App.tsx:271 is a legitimate initial-null check, not a redundant guard",
+        "No async functions that never await; no synchronous logic wrapped in async",
+        "No boolean expressions that simplify (no if x: return true else return false patterns)",
+        "Scroll-based scene navigation (App.tsx:269-301) uses clear mathematical transformations: progress mapped linearly through cover then scene phases with explicit bounding via Math.max/Math.min",
+        "Event listener cleanup is correct: setTimeout cleared via clearTimeout (Hero), scroll listener removed via removeEventListener (App)",
+        "Passive scroll listener used for performance ({ passive: true }) at App.tsx:298"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": "The codebase is small (4 production files, ~479 LOC) and the logic is straightforward. Minor observations: (1) `const headerHeight = 0` in App.tsx:273 is a constant that could be inlined without losing clarity, (2) `Math.min(1, ...)` in the sceneProgress calculation at App.tsx:290 is technically redundant since the expression is already bounded to [0,1]. These are at the threshold of nit-level observations, not defects, and prevent a perfect score only because they represent trivial opportunities for simplification."
+    },
+    "type_safety": {
+      "evidence": [
+        "tsconfig.app.json lacks 'strict: true' (and 'strictNullChecks'), allowing null/undefined to be silently assignable to all typed variables throughout the codebase",
+        "App component (default export, line 264) has no explicit return type annotation despite being the primary public API export",
+        "Button component (exported, line 35 in button.tsx) has no explicit return type annotation",
+        "cn() utility (exported, line 4 in utils.ts) has no explicit return type annotation",
+        "No 'any' types, 'as any' casts, '// @ts-ignore', or '// type: ignore' comments anywhere in the codebase",
+        "type keyword used correctly for type-only imports (e.g. type VariantProps, type ReactNode, type ClassValue) consistent with verbatimModuleSyntax setting",
+        "Scene interface (line 7-15 in App.tsx) defines all fields as required and they are accessed via dot notation \u2014 no TypedDict-style .get() with defaults pattern",
+        "No enums defined in the codebase, so no enum bypass patterns exist",
+        "Non-null assertion (!) on document.getElementById('root') in main.tsx line 6 is a standard React/Vite pattern"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit",
+      "confidence": "high",
+      "issues_preventing_higher_score": ""
+    }
+  },
+  "dimension_judgment": {
+    "cross_module_architecture": {
+      "dimension_character": "The codebase has a clean, unidirectional dependency graph with no cycles or layer violations. The primary architectural concern is that App.tsx functions as a hub module (407 LOC, ~85% of production code) combining scene data, UI components, and scroll-driven state management -- creating a moderate blast radius where changes to any aspect of the presentation layer route through this single module.",
+      "score_rationale": "The architecture is fundamentally sound for a project of this size (4 files, 479 LOC): dependency direction is clear, boundaries are respected, and there is no cross-module coordination through shared mutable state. The score of 78 reflects that a new team member would understand the structure in seconds, but is moderated by the App.tsx hub module which blurs the boundary between data/config and presentation."
+    },
+    "high_level_elegance": {
+      "dimension_character": "The project uses a clean, modern stack with sensible conventions (shadcn/ui layout, path aliases, TypeScript strict mode) and a small, focused public surface. However, the README is a boilerplate scaffold that does not describe the actual TOB-I project at all, stale template artifacts remain in src/assets/, and the inspo/ directory introduces non-production noise at the project root, blurring boundary clarity for a new engineer.",
+      "score_rationale": "Scored 75.0 because the structural foundations (entry points, aliases, component patterns) are sound for this project scale, and the codebase follows well-known React/Vite conventions consistently. The score is capped by the README contract mismatch, stale template artifacts, and the presence of non-production reference material that erode the trustworthiness of project documentation and boundary clarity."
+    },
+    "convention_outlier": {
+      "dimension_character": "The codebase follows mainstream React/TypeScript conventions consistently: PascalCase components, camelCase utilities, kebab-case filenames, and a clean Vite project layout. However, three minor convention outliers exist: quote style inconsistency between sibling modules (single vs double quotes), a namespace React import that breaks from the named-import pattern used elsewhere, and mixed default/named export strategies. None of these are severe, but they create small friction points for developers navigating the codebase.",
+      "score_rationale": "Scored 80.0: the codebase is well-organized with strong convention adherence for its size (4 production files, 479 LOC). The quote inconsistency and import style drift are real but minor outliers that a quick formatting pass could resolve. No major convention violations like snake_case in camelCase codebases, mixed type strategies, or behavioral protocol drift were found. The score reflects solid fundamentals with room for tightening consistency."
+    },
+    "error_consistency": {
+      "dimension_character": "The codebase is a small presentational landing page (479 LOC, 4 files) with zero I/O boundaries, zero network calls, zero user input processing, and zero parsing operations. Error handling is trivially consistent because there are no operations in the codebase that can meaningfully fail at runtime \u2014 the implicit strategy is uniformly \u2018no handling needed\u2019 across every module. This is appropriate for the codebase\u2019s scope as a static React presentation layer.",
+      "score_rationale": "A score of 95.0 reflects that the codebase has no error consistency issues whatsoever: no mixed strategies, no error context loss, no silent swallowing, no inconsistent error types, and no missing I/O error handling. The only consideration is the standard React non-null assertion in main.tsx, which falls under the skip category of intentional top-level handlers. The 5-point delta from 100 accounts for the fact that a developer adding error-prone features in the future would need to establish an explicit error strategy from scratch."
+    },
+    "naming_quality": {
+      "dimension_character": "The codebase employs consistent, conventional naming patterns throughout: PascalCase for React components, camelCase for functions and variables, and meaningful names for domain concepts. The small codebase size (~479 LOC across 4 files) naturally limits the opportunity for naming drift. Interface Scene and its fields are well-named, component names clearly communicate their UI role, and utility names follow well-known ecosystem conventions (cn from shadcn/ui). The overall impression is clean and approachable for any React developer.",
+      "score_rationale": "Naming is clear, consistent, and follows established React/TypeScript conventions. A new team member would understand component responsibilities (App, Hero, Card, Button) and variable purposes (activeIndex, coverProgress, logoSrc) within seconds. There are no name/behavior mismatches, no inexplicable abbreviations, and no generic verb pollution. The score reflects a well-named, convention-abiding codebase; the small surface area means there is limited data to assess long-term naming drift risk, hence the slight gap from a perfect score."
+    },
+    "abstraction_fitness": {
+      "dimension_character": "The codebase employs abstractions sparingly and deliberately. The cn utility, Button component with CVA variants, and Card component are all earned abstractions that reduce boilerplate or centralize styling logic without adding indirection. The Scene interface provides useful type safety for structured scene data, though it lacks polymorphic usage pressure and borders on one-implementation ceremony. Overall the codebase respects its small size and avoids the common trap of premature abstraction \u2014 every abstraction that exists serves a clear, concrete purpose, and no cross-feature wrapper chains or delegation-heavy patterns are present.",
+      "score_rationale": "The codebase scores high on abstraction fitness because all existing abstractions are earned and add tangible value. There are no pass-through wrappers beyond the standard cn utility (which is an earned shadcn/ui pattern), no delegation-heavy classes, no facade modules, and no wide parameter bags. The sole minor concern is the Scene interface having a single implementation with no substitution pressure, but this is offset by the genuine type-safety benefit it provides across 6 scene objects and the fact that it is isolated (not a widespread pattern). The score reflects a disciplined approach to abstraction appropriate for the codebase's small scale."
+    },
+    "dependency_health": {
+      "dimension_character": "The dependency set is generally well-curated for a small React + Vite + Tailwind project, using standard choices like clsx+tailwind-merge for class management and cva for component variants. However, the presence of the `radix-ui` meta package alongside the individual `@radix-ui/react-slot` dependency creates redundancy \u2014 the meta package is never imported and adds unnecessary transitive bulk to the install.",
+      "score_rationale": "Score of 92 reflects a clean dependency set with one clear redundant entry (`radix-ui`). No circular dependencies, version conflicts, or duplicate-purpose libraries exist. The codebase is small (479 LOC, 4 files) so the impact is minor, but the unused dependency detracts from an otherwise lean and appropriate dependency selection."
+    },
+    "low_level_elegance": {
+      "dimension_character": "Function internals are generally direct and intention-revealing: state is managed through explicit React hooks, side effects are bounded with proper cleanup, and the Card/Button components are cleanly extracted with focused interfaces. However, App.tsx mixes a large inline data array with its component logic, and styling oscillates between Tailwind utility classes and inline style props within the same function body, creating two parallel visual mechanisms. The scroll-driven animation logic expresses a complex dataflow compactly but contains a minor redundant computation that reduces precision.",
+      "score_rationale": "Score of 78.0 reflects function internals that serve the developer adequately for a project of this size, with clean hook usage and proper extraction boundaries for the UI primitives. Points are deducted for the dual-path styling strategy (inline styles + Tailwind) that fragments how visual intent is expressed within a single function, the hardcoded hex colors that bypass the design-system tokens defined in index.css, and the inline scenes data monolith that adds mental overhead when navigating the file."
+    },
+    "mid_level_elegance": {
+      "dimension_character": "The codebase has very few module boundaries to evaluate (4 source files, 479 LOC), and the few that exist \u2014 main.tsx\u2192App, App\u2192Button \u2014 are clean, explicit, and minimal. However, the entire orchestration layer is concentrated in a single 407-line App.tsx module that mixes scroll event handling, state management, scene data, UI rendering, and inline animation logic. This monolithic structure means there are almost no integration seams or collaborator handoffs to assess; the orchestrator reads as tangled code rather than composition of separated concerns.",
+      "score_rationale": "Score reflects that while the existing handoffs (entry point, Button props, cn utility) are well-designed and predictable, the near-absence of module decomposition in the primary application module severely limits mid_level_elegance. Error and lifecycle propagation patterns are entirely absent. A new team member looking at App.tsx would need to read all 407 lines to understand the orchestration flow. The score is anchored by the quality of the few boundaries that exist (strong) weighed against the monolithic nature of the core orchestration (weak)."
+    },
+    "test_strategy": {
+      "dimension_character": "The codebase has no test strategy whatsoever. Zero test files exist, no test framework is configured in package.json, and the core application component (App.tsx, 407 LOC) containing complex scroll-driven state management and business logic is entirely untested. While the project is small and some low-value files (main.tsx, utils.ts) can reasonably be excluded, the complete absence of any verification means behavior changes, regressions, and edge cases cannot be caught automatically.",
+      "score_rationale": "The score of 10.0 reflects that the codebase fails at every aspect of test strategy: critical paths are untested, no test infrastructure exists, and there is no mechanism for regression detection. The only mitigating factor is the project's small size (479 LOC), where the impact of missing tests is proportionally lower than in a larger codebase, and the presence of low-value files that are appropriately excluded from testing requirements."
+    },
+    "api_surface_coherence": {
+      "dimension_character": "A concise, consistent, and well-typed public API surface across a small codebase. All exports follow clear patterns\u2014React components use destructured props with VariantProps for styling, and utilities use typed parameter lists. The surface is minimal (4 symbols across 3 modules) and avoids overloaded interfaces or mixed sync/async patterns. The only notable weakness is an unchecked non-null assertion at the entry point that silently converts a missing DOM element into a runtime TypeError rather than providing a recoverable error contract.",
+      "score_rationale": "At 92.0, this reflects the codebase's clean API surface: no shape inconsistencies across modules, no overloaded interfaces, no mixed sync/async confusion, and no parameter-count violations. The deduction stems from one concrete defect\u2014the non-null assertion at the application entry boundary (main.tsx:6)\u2014and the systemic absence of error contract documentation, which, while mitigated by the UI-rendering nature of the code, represents a consistency gap against the dimension's rubric."
+    },
+    "authorization_consistency": {
+      "dimension_character": "This is a static marketing landing page with no authentication or authorization machinery whatsoever. Route handlers, API endpoints, databases, and permission systems are entirely absent, so the patterns this dimension evaluates \u2014 inconsistent middleware, RLS gaps, magic permission literals, mixed trust boundaries \u2014 cannot exist. The codebase is inherently consistent by virtue of having no auth concerns to be inconsistent about.",
+      "score_rationale": "A score of 100.0 reflects that zero authorization inconsistencies exist in this codebase. No route handlers have missing auth decorators, no sibling endpoints disagree on trust boundaries, no permission strings (literal or constant) appear anywhere, and no service-role bypass paths exist without audit logging. The entire site qualifies as a public/unauthenticated route (matching the 'skip' guidance for documented public pages), so no auth patterns are expected or missing."
+    },
+    "ai_generated_debt": {
+      "dimension_character": "This codebase is remarkably clean from an AI-generated debt perspective. Every look-for criterion \u2014 restating comments, nosy debug logging, defensive overengineering, docstring bloat, pass-through wrappers, generic names, and copied boilerplate error handling \u2014 returns zero findings. The code achieves clarity through straightforward structure and domain-specific naming rather than ceremony or commentary.",
+      "score_rationale": "Score 95.0 reflects a codebase with zero instances of AI-generated debt patterns across all defined criteria. The code is direct, purposeful, and communicates intent through structure rather than excessive annotation or defensive padding. The score stops short of perfect only because the codebase is small (479 LOC, 4 files), providing limited surface area for these patterns to manifest; a larger codebase maintained with equal discipline would warrant a perfect score."
+    },
+    "incomplete_migration": {
+      "dimension_character": "The codebase is fully TypeScript, uniformly uses functional React components with hooks, and contains zero deprecated symbols, stale migration shims, or leftover migration TODOs. Dependencies are modern and single-version with no dual-library duplication. This is a greenfield project that has never undergone a migration, so there is no incomplete migration debt to address.",
+      "score_rationale": "A developer evaluating the codebase from an incomplete_migration perspective finds a clean, consistent surface: all source is TypeScript, all components are functional, no deprecated APIs are in use, and no migration artifacts linger. The score of 100.0 reflects that zero defects from this dimension were identified after exhaustive examination of all source files."
+    },
+    "package_organization": {
+      "dimension_character": "The project follows a standard Vite+React+Tailwind+shadcn directory layout with clean, conventional separation of concerns. All four production source files are appropriately placed in directories that match their responsibility (lib/ for utilities, components/ui/ for UI primitives, assets/ for static resources, src/ root for entry points and the main app component). The structure is immediately navigable by anyone familiar with modern React tooling.",
+      "score_rationale": "At 4 production files and 479 LOC, this project is well below the <20 file threshold where flat structure is appropriate. None of the flagged anti-patterns apply: no straggler root files, no import-affinity mismatches, no coupling-direction failures, no flat directory overload, and no ambiguous folder names. The only reason to withhold a perfect score is that the organization has not been exercised by growth; within its current scope, it is ideal."
+    },
+    "initialization_coupling": {
+      "dimension_character": "The codebase is a small (479 LOC, 4 files) Vite+React application with a trivially simple acyclic import graph and zero initialization coupling patterns. No global singletons, no import-time side effects, no circular dependencies, and no environment variable reads at module scope exist. The only module-scope work is standard React JSX element creation in the scenes array and a CVA variant configuration call, both of which are harmless conventional patterns.",
+      "score_rationale": "Score is 100.0 because the codebase exhibits zero measurable initialization coupling defects across all six rubric criteria. The import dependency tree is a clean linear chain, there are no boot-order dependencies, no mutable shared state across modules, and all framework bootstrap code is properly isolated to the entry point. This is as clean as a codebase of this size can be from an initialization coupling perspective."
+    },
+    "design_coherence": {
+      "dimension_character": "The codebase has solid foundational patterns \u2014 cva-driven button variants, CSS theme tokens, and a clean project skeleton \u2014 but App.tsx (85% of production code) accumulates multiple concerns that blur module boundaries. The scenes data couples presentation with content, color strategy is split between data-driven and hardcoded arbitrary values, and three component definitions in one file erode separation of responsibilities. A new team member would grasp the small components quickly but would need to untangle App.tsx to understand the boundaries.",
+      "score_rationale": "The button and utility code are well-structured examples of earned abstraction, and the CSS theme system is a strong positive. However, App.tsx's mixing of data, presentation, and component definitions across 407 LOC reduces design coherence below what the otherwise clean patterns would suggest. Score 72.0 reflects adequate structural design with clear improvement opportunities that would benefit a new team member's onboarding."
+    },
+    "contract_coherence": {
+      "dimension_character": "Contract coherence is strong across all four modules: every function's runtime behavior matches its TypeScript signature, export patterns follow predictable React/Vite conventions, and there are no getter-prefixed functions hiding mutations. The codebase is small, but the discipline is clean -- no return type annotation lies, no docstring/signature divergence, and no error contract violations exist.",
+      "score_rationale": "Zero contract violations were found after thorough examination of all functions, their signatures, export patterns, and error contracts. TypeScript inference consistently produces correct return types, props are destructured correctly without attribute leakage, and useEffect lifecycles properly return cleanup functions. The 95.0 score reflects perfect adherence within existing code while acknowledging that the codebase's small scale means complex contract scenarios are not exercised."
+    },
+    "logic_clarity": {
+      "dimension_character": "The codebase exhibits clear, provable control flow with no logic defects. The most complex logic \u2014 a scroll-driven scene navigation system in App.tsx \u2014 uses explicit mathematical transformations with proper bounding, readable variable names, and correct lifecycle cleanup. The remaining files (main.tsx, button.tsx, utils.ts) are trivially simple with no branching at all.",
+      "score_rationale": "Every branch in the codebase has a meaningful, reachable state. No dead code paths, no identical branches, no always-true/false conditions, no redundant null checks, and no async-wrapped-sync patterns were found. The logic, particularly the scroll-progression math, does exactly what the scene-based cover-flow UX requires. At 95.0, the score reflects strong logic clarity held back only by a pair of trivial simplification opportunities (a constant-zero variable and a redundant clamp) that do not merit formal issues."
+    },
+    "type_safety": {
+      "dimension_character": "The codebase uses TypeScript with clean, explicit types at the code level \u2014 no any, no casts, no suppressed errors \u2014 but the type system's effectiveness is undermined at the configuration level. The tsconfig.app.json is missing strict mode (strictNullChecks), which means null and undefined are silently accepted by every type annotation, making the stated types untrustworthy for null safety. This is a classic 'looks typed but isn't really' configuration gap in an otherwise well-structured codebase.",
+      "score_rationale": "The code itself demonstrates good type discipline: proper interfaces, typed utility functions, correct use of type-only imports, and zero unsafe patterns. However, the absence of strict mode in the TypeScript configuration is a foundational gap that limits the value of all type annotations. A score of 75 reflects that the code reads as well-typed but the compiler is not actually enforcing null safety, which a TypeScript developer would immediately notice."
+    }
+  },
+  "issues": [
+    {
+      "dimension": "cross_module_architecture",
+      "identifier": "app-tsx-hub-module",
+      "summary": "App.tsx (407 LOC) acts as a hub module combining scene data, Hero component, footer, and scroll-driven state management in a single file",
+      "confidence": "high",
+      "suggestion": "Extract the scenes data array and hardcoded color palette into a separate data file (e.g. src/data/scenes.ts or src/data/site-content.ts). This separates configuration/presentation data from rendering logic and reduces the blast radius for content changes.",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "App.tsx defines 6 scene objects with inline JSX panels and content at module scope (lines 28-212)",
+        "App.tsx contains both the Hero component (lines 214-262) and the App component (lines 264-405)",
+        "Hardcoded color values (e.g. '#e54833', '#3e7ce4', '#f9cc48', '#6a9cf4', '#2d8c47', '#e8751a') appear ~50 times across the component, embedded in JSX rather than extracted to a theme or data config",
+        "App.tsx represents ~85% of production code (407 of ~479 LOC)"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "readme-boilerplate-mismatch",
+      "summary": "README.md is the default Vite+React scaffold template and does not describe the TOB-I project, its architecture, setup, or deployment",
+      "confidence": "high",
+      "suggestion": "Rewrite README.md to describe the TOB-I project purpose, architecture overview, available scripts, stack decisions (Vite, React 19, Tailwind CSS 4, shadcn/ui), and any relevant setup or deployment notes",
+      "related_files": [
+        "README.md"
+      ],
+      "evidence": [
+        "README.md contains generic Vite template instructions, Oxlint configuration notes, and React Compiler documentation",
+        "No mention of TOB-I, educational robotics, the landing page purpose, or project-specific setup steps",
+        "A new engineer reading the README would have no idea what this project is or how it is structured"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "stale-template-assets",
+      "summary": "Unused template boilerplate files (react.svg tracked, vite.svg and hero.png untracked) in src/assets/ have no consumers and pollute the asset directory",
+      "confidence": "high",
+      "suggestion": "Remove src/assets/react.svg, src/assets/vite.svg, and src/assets/hero.png \u2014 they are unused template artifacts that do not correspond to any current project capability",
+      "related_files": [
+        "src/assets/react.svg",
+        "src/assets/vite.svg",
+        "src/assets/hero.png",
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "src/App.tsx only imports logo.svg and tobi.png from src/assets/",
+        "react.svg is tracked by git but has zero import references anywhere in the codebase",
+        "vite.svg and hero.png are present in src/assets/ but unused \u2014 leftovers from the Vite template scaffold",
+        "These artifacts create ambiguity about which assets are production requirements versus template debris"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "inspo-non-production-directory",
+      "summary": "inspo/ directory at project root contains downloaded external webpage assets (Neobrutalism CSS inspiration files) that are non-production reference material",
+      "confidence": "high",
+      "suggestion": "Move the inspo/ directory outside the repository or add it to .gitignore as non-production reference material; document its purpose if it must remain in the worktree",
+      "related_files": [
+        "inspo/"
+      ],
+      "evidence": [
+        "inspo/ directory contains files from an external URL: 'Neobrutalism components - Start making neobrutalism layouts today_files/*.css'",
+        "This is research/inspiration material, not production source code",
+        "Its presence at the project root blurs the production boundary \u2014 a new engineer cannot tell if this is part of the shipped product"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "unused-font-imports",
+      "summary": "index.html loads Google Fonts (Inter, JetBrains Mono, Outfit) that are never used by the application CSS \u2014 only DM Sans is configured",
+      "confidence": "high",
+      "suggestion": "Remove the unused Google Font imports from index.html, keeping only DM Sans if it is loaded from Google Fonts (or ensure the link tag matches the fonts actually used in CSS)",
+      "related_files": [
+        "index.html",
+        "src/index.css"
+      ],
+      "evidence": [
+        "index.html line 11 loads fonts.googleapis.com CSS for Inter, JetBrains Mono, and Outfit font families",
+        "src/index.css @theme block only configures DM Sans via --font-family-display and --font-family-body",
+        "The HTML document contract promises fonts the application does not consume, creating an unnecessary network request and misleading documentation of design dependencies"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "high_level_elegance",
+      "identifier": "monolithic-app-component",
+      "summary": "App.tsx at 407 LOC mixes scene data definitions, Card and Hero subcomponents, and layout orchestration in a single module, limiting decomposition clarity",
+      "confidence": "medium",
+      "suggestion": "Extract Card and Hero into separate component files under src/components/ and extract scenes data into src/data/scenes.tsx, keeping App.tsx focused on orchestration and layout",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "Card component (lines 17-26) and Hero component (lines 214-262) are defined inside App.tsx rather than extracted to their own files",
+        "scenes data array (lines 28-212, ~185 lines) with 6 complex scene objects is embedded in App.tsx instead of a separate data module",
+        "App.tsx has three distinct responsibilities aggregated in one file: data definition, UI subcomponent implementation, and orchestration/layout logic"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "quote-style-inconsistency-src",
+      "summary": "Inconsistent quote style between sibling modules in src/: main.tsx uses single quotes while App.tsx uses double quotes",
+      "confidence": "high",
+      "suggestion": "Normalize quote style to match project convention: either convert main.tsx to double quotes or App.tsx to single quotes. Easiest fix is to align main.tsx to double quotes via a formatter (Prettier/dprint) run.",
+      "related_files": [
+        "src/main.tsx",
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "src/main.tsx line 1: import { StrictMode } from 'react' (single quotes)",
+        "src/main.tsx line 4: import App from './App.tsx' (single quotes)",
+        "src/App.tsx line 1: import { useState, useEffect, useRef, type ReactNode } from \"react\" (double quotes)",
+        "src/App.tsx line 2: import { Button } from \"@/components/ui/button\" (double quotes)",
+        "src/App.tsx line 3: import { ArrowDown } from \"lucide-react\" (double quotes)"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "namespace-react-import",
+      "summary": "Namespace import for React in button.tsx while sibling modules use named imports creates an import style island",
+      "confidence": "medium",
+      "suggestion": "Replace import * as React from \"react\" with import { ComponentProps, type ComponentPropsWithoutRef } from \"react\" (or the specific types used), aligning with the named-import convention used by sibling modules.",
+      "related_files": [
+        "src/components/ui/button.tsx",
+        "src/App.tsx",
+        "src/main.tsx"
+      ],
+      "evidence": [
+        "src/components/ui/button.tsx line 4: import * as React from \"react\" (namespace import)",
+        "src/App.tsx lines 1-5: { useState, useEffect, useRef, type ReactNode } from \"react\" (named imports)",
+        "src/main.tsx line 1: { StrictMode } from 'react' (named import)",
+        "React.ComponentProps on line 41 of button.tsx is the sole consumer of the namespace; could be imported as { ComponentProps } instead"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "convention_outlier",
+      "identifier": "mixed-export-patterns",
+      "summary": "Mixed default and named export patterns: App.tsx uses default export while sibling modules use named exports",
+      "confidence": "low",
+      "suggestion": "Align export strategy: either convert App.tsx to a named export (export { App }) and update main.tsx's import, or accept this as conventional React variance. The latter is simpler and avoids unnecessary churn.",
+      "related_files": [
+        "src/App.tsx",
+        "src/lib/utils.ts",
+        "src/components/ui/button.tsx"
+      ],
+      "evidence": [
+        "src/App.tsx line 407: export default App (default export)",
+        "src/lib/utils.ts line 4: export function cn(...) (named export)",
+        "src/components/ui/button.tsx line 56: export { Button, buttonVariants } (named export)",
+        "This is partially conventional (React root components are often default-exported) but diverges from the named-export pattern used by all other modules"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "dependency_health",
+      "identifier": "unused-radix-ui-meta",
+      "summary": "Unused `radix-ui` meta dependency \u2014 the project imports `@radix-ui/react-slot` directly and never references the umbrella `radix-ui` package",
+      "confidence": "high",
+      "suggestion": "Remove `\"radix-ui\": \"^1.6.0\"` from package.json dependencies \u2014 the project only uses `@radix-ui/react-slot` which is already listed separately",
+      "related_files": [
+        "package.json"
+      ],
+      "evidence": [
+        "`radix-ui` is listed in package.json dependencies (line 18) but no source file contains `from \"radix-ui\"` or `require(\"radix-ui\")`",
+        "The only Radix import is `import { Slot } from \"@radix-ui/react-slot\"` in src/components/ui/button.tsx \u2014 this individual package is also listed as a direct dependency (line 13)",
+        "Removing `radix-ui` would not break any imports since `@radix-ui/react-slot` is independently declared"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "lle-001",
+      "summary": "Duplicate computation of progress * (1 + n) in scroll handler",
+      "confidence": "high",
+      "suggestion": "Extract the computed value into a local variable: const raw = progress * (1 + n); const cover = Math.min(1, raw); if (raw > 1) { ... }",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "Line 286 computes cover = Math.min(1, progress * (1 + n))",
+        "Line 289 recomputes the same expression as progress * (1 + n) > 1",
+        "The value is already available; it could be bound to a local const rawProgress = progress * (1 + n) on line 285"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "lle-002",
+      "summary": "Hardcoded hex scene colors bypass CSS custom property design tokens",
+      "confidence": "high",
+      "suggestion": "Define the six scene colors as CSS custom properties in index.css (e.g., --scene-costo: #e54833, --scene-acceso: #3e7ce4) and reference them via Tailwind's arbitrary value syntax or by mapping scene IDs to CSS variables in the component",
+      "related_files": [
+        "src/App.tsx",
+        "src/index.css"
+      ],
+      "evidence": [
+        "Each scene in the scenes array stores a hardcoded color: \"#XXXXXX\" (six unique values across six scenes)",
+        "index.css defines --main: #3e7ce4, --background: #f5efe6, --foreground: #0a0a0a, but none are referenced in the scene data",
+        "Some scene colors match defined tokens (e.g., #3e7ce4 == --main), indicating a missed opportunity to use the design system",
+        "The Card component receives color as a prop and applies it via inline style={{ backgroundColor: color }}, bypassing CSS entirely"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "low_level_elegance",
+      "identifier": "lle-003",
+      "summary": "Dual-path styling: inline style props mixed with Tailwind utility classes in Hero component",
+      "confidence": "medium",
+      "suggestion": "Move the maskImage gradient and scroll button positioning into CSS utility classes or @layer utilities in index.css so all visual output is expressed through the same design system interface. For the maskImage, consider a Tailwind arbitrary value: [mask-image:linear-gradient(to_bottom,black_30%,transparent_100%)]",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "Hero robot image (line 244) uses style={{ maskImage: ..., WebkitMaskImage: ... }} while all surrounding styling uses Tailwind classes",
+        "Scroll button (line 248) uses inline style={{ bottom: 'clamp(80px, 12vh, 140px)' }} for positioning",
+        "The pattern forces readers to check two different styling mechanisms when reasoning about the component's visual output",
+        "From the Migrator persona: this is a half-migrated pattern where most styling has moved to the Tailwind design system but edge cases fall back to inline values"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "mle-001",
+      "summary": "App.tsx monolithic module conflates data, orchestration, state, and rendering with no internal seam boundaries",
+      "confidence": "high",
+      "suggestion": "Extract the scroll-activation orchestration into a dedicated hook (e.g., useScrollActivation or useSceneNavigation) that returns { activeIndex, coverProgress } and receives scenes as input. Separate scene data into a typed data file. Keep App.tsx as a thin composition layer.",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "App.tsx contains scroll event listener setup/teardown, coverProgress/activeIndex state management, progress calculation math, scene data array with ReactNode fields, Hero and Card component definitions, and all JSX rendering in one 407-line file with no internal module boundaries",
+        "The useEffect in App() handles both scroll event wiring and business-logic computation (scene indexing), mixing infrastructure with domain logic",
+        "A new team member must read through the entire file to understand the scroll-driven scene activation flow \u2014 no single collaborator or abstraction captures this behavior"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "architectural_change"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "mle-002",
+      "summary": "No error boundaries or lifecycle propagation patterns established across module seams",
+      "confidence": "high",
+      "suggestion": "Add at least one ErrorBoundary wrapper in main.tsx around <App />, and consider a second boundary around the scroll-driven scene area to isolate failures. Establish a consistent error-propagation convention (e.g., a shared result/error type or dedicated error state) for future module boundaries.",
+      "related_files": [
+        "src/App.tsx",
+        "src/main.tsx"
+      ],
+      "evidence": [
+        "Neither main.tsx nor App.tsx use React ErrorBoundary or any error-propagation pattern; there is no try/catch, error state, or fallback UI anywhere in the component tree",
+        "If a child component (Hero, Button, any scene panel) throws during render, there is no error boundary to catch it \u2014 the entire app would unmount with no recovery path",
+        "No pattern exists for propagating loading, error, or empty states between potential module boundaries"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "mid_level_elegance",
+      "identifier": "mle-003",
+      "summary": "Scene data model tightly couples presentation (ReactNode) with data, eliminating data-translation boundaries",
+      "confidence": "medium",
+      "suggestion": "Define scene content as plain data (strings, optional image URLs, layout enums) and let a dedicated rendering component translate data to JSX. This creates an explicit data-translation boundary and allows scene definitions to be pure configuration.",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "The Scene interface includes leftPanel, rightPanel, and content typed as ReactNode, meaning scene definition files cannot exist without importing React and building JSX",
+        "Data translation at boundaries \u2014 identified as a key 'look_for' item in the rubric \u2014 cannot occur because the data model never separates raw content from its presentation",
+        "Adding a new scene type (e.g., a video scene or an interactive form) would require modifying the Scene interface and all consuming JSX simultaneously, since there is no adapter layer"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "app-core-untested",
+      "summary": "Core application component src/App.tsx (407 LOC) with complex scroll-driven state management has zero test coverage",
+      "confidence": "high",
+      "suggestion": "Install vitest + @testing-library/react, create a test setup file, and write component tests for App.tsx covering: scroll-based coverProgress/activeIndex computation, scene transition logic, Hero scroll button timed visibility, Card rendering with color props, and scenes data integrity",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "src/App.tsx contains 407 LOC encompassing the entire application: complex scroll-driven state management (coverProgress, activeIndex computed from scroll position), useEffect with passive scroll event listener and cleanup, Hero component with timed setTimeout (3000ms delay) for scroll button visibility, Card subcomponent, and 6-scene data array with render logic - all critically untested for a file of this size and behavioral complexity"
+      ],
+      "impact_scope": "subsystem",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "test_strategy",
+      "identifier": "button-component-untested",
+      "summary": "Reusable Button component (src/components/ui/button.tsx) with 4 variants and 4 sizes has no unit tests",
+      "confidence": "high",
+      "suggestion": "Add unit tests for Button component covering: each variant renders the correct CSS class string, each size applies correct dimension classes, asChild=true forwards rendering to the child element, className prop merges with variant-determined classes via cn(), and disabled state applies pointer-events-none and opacity-50 classes",
+      "related_files": [
+        "src/components/ui/button.tsx"
+      ],
+      "evidence": [
+        "src/components/ui/button.tsx is a 56 LOC reusable UI component with 4 variants (default, noShadow, neutral, reverse), 4 sizes (default, sm, lg, icon), an asChild prop using Radix Slot for polymorphic rendering, and className merging via cn() utility - no tests verify that variant/size combinations produce correct CSS classes, that asChild correctly delegates to the child element, or that className prop merges appropriately"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "api_surface_coherence",
+      "identifier": "entry-non-null-assertion",
+      "summary": "Entry point uses non-null assertion on getElementById, bypassing error contract for missing DOM element",
+      "confidence": "high",
+      "suggestion": "Replace the non-null assertion with a check: `const rootEl = document.getElementById('root'); if (!rootEl) throw new Error('Missing #root element in HTML template'); createRoot(rootEl).render(...)` or render a fallback UI explaining the missing mount point",
+      "related_files": [
+        "src/main.tsx"
+      ],
+      "evidence": [
+        "`src/main.tsx:6`: `createRoot(document.getElementById('root')!)` forces a non-null assertion on the DOM lookup",
+        "If the `#root` element is absent (e.g., HTML template change, SSR mismatch, test environment), this produces an unhelpful `TypeError: Cannot read properties of null` instead of a descriptive error",
+        "There is no fallback rendering, error boundary, or console.warn before the crash"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "dc-hardcoded-colors",
+      "summary": "50 hardcoded hex colors used inconsistently \u2014 some data-driven, others as Tailwind arbitrary values",
+      "confidence": "high",
+      "suggestion": "Define all scene accent colors as theme CSS variables or use the scene.color field consistently for all color applications (subtitle badge, content text highlights, panel accents). Replace Tailwind arbitrary values like text-[#2d8c47] with references to the scene data or semantic tokens.",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "App.tsx lines 33, 36-39, 44-47: scene.color field drives subtitle badge backgroundColor via style prop",
+        "App.tsx line 55: content text color hardcoded as text-[#2d8c47] instead of deriving from scene.color",
+        "App.tsx line 231: hero accent background hardcoded as bg-[#e54833]",
+        "query.json confirms 50 hardcoded color instances in App.tsx at lines 33, 36-39, 44-47, 63, etc.",
+        "All 6 scenes use the same color in multiple places \u2014 the scene.color field exists but is not consistently applied to content text or panel headers"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "dc-scene-data-coupled-jsx",
+      "summary": "Scene data structure embeds full JSX in leftPanel, rightPanel, and content fields, mixing data with presentation",
+      "confidence": "high",
+      "suggestion": "Extract scene panel rendering into a data-driven approach: define scene data as plain objects (title, subtitle, color, cards: [{value, label}]), then render cards from that data with a shared SceneCardList component. This separates data from presentation and reduces the scenes array to ~60 lines of pure config.",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "App.tsx lines 28-212: scenes array contains 185 lines where each scene object includes leftPanel (<div className=\"flex flex-col gap-3 h-full\"><Card .../></div>), rightPanel (same structure), and content (<div className=\"space-y-4...\">) as JSX expressions",
+        "Every scene follows the same structural pattern (Card calls with value/label/color, specific layout divs) but the pattern is duplicated inline rather than data-driven",
+        "A developer adding a new scene must copy-paste the same JSX structure with only text/color diffs"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "dc-repeated-panel-rendering",
+      "summary": "Three near-identical scene panel render loops for left, center, and right panels in App.tsx",
+      "confidence": "high",
+      "suggestion": "Extract a reusable ScenePanel component accepting props: contentSlot, scrollDirection, and translateOffset. The three render blocks would reduce to three <ScenePanel> invocations, eliminating ~60 lines of duplicated map/wrapper/transition boilerplate.",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "App.tsx lines 318-336: left panel renders scenes.map() with absolute-positioned divs, opacity/transform transitions, pointerEvents logic, scroll-down animation mask",
+        "App.tsx lines 339-364: center panel renders scenes.map() with same absolute-positioned divs, opacity/transform transitions, pointerEvents logic, different text layout",
+        "App.tsx lines 367-386: right panel renders scenes.map() with same absolute-positioned divs, opacity/transform transitions, pointerEvents logic, scroll-up animation mask",
+        "Each block differs only in content slot (leftPanel/rightPanel/content), scroll animation class (scroll-down/none/scroll-up), and transform direction (translateY(0.75rem)/translateY(1rem)/translateY(-0.75rem))"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "design_coherence",
+      "identifier": "dc-multiple-components-one-file",
+      "summary": "Three React components (Card, Hero, App) with distinct responsibilities defined in a single file",
+      "confidence": "medium",
+      "suggestion": "Extract Hero to src/components/hero.tsx and Card to src/components/ui/card.tsx. This makes module scopes explicit: App owns scroll orchestration, Hero owns the landing section, Card is a reusable presentational component. A new team member can navigate by file name rather than scanning 407 LOC.",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "App.tsx lines 17-26: Card component \u2014 small presentational helper, but defined inside App.tsx rather than components/",
+        "App.tsx lines 214-262: Hero component \u2014 independent landing section with its own useState (showScrollBtn) and useEffect (delayed timer for scroll button), distinct responsibility from the scene carousel",
+        "App.tsx lines 264-405: App component \u2014 manages scroll progress, active index, renders Hero + scene carousel + footer",
+        "Hero has separate state lifecycle and could be independently tested if extracted"
+      ],
+      "impact_scope": "module",
+      "fix_scope": "multi_file_refactor"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "tsconfig-missing-strict-mode",
+      "summary": "tsconfig.app.json is missing strict: true (and strictNullChecks), so null/undefined are silently assignable to all typed variables across the entire codebase",
+      "confidence": "high",
+      "suggestion": "Add 'strict: true' (or at minimum 'strictNullChecks: true') to the compilerOptions in tsconfig.app.json. This will cause any null/undefined assignments to incompatible types to fail compilation, making all existing type annotations actually enforceable.",
+      "related_files": [
+        "tsconfig.app.json"
+      ],
+      "evidence": [
+        "tsconfig.app.json has noUnusedLocals, noUnusedParameters, noFallthroughCasesInSwitch but omits strict, strictNullChecks, noImplicitAny, strictFunctionTypes, and other strict-mode flags",
+        "Without strictNullChecks, a function typed as -> string could return null at runtime without a compiler error, making all return type annotations unreliable for null safety",
+        "TypeScript ~6.0.2 is used, where strict mode has been the recommended default for many years"
+      ],
+      "impact_scope": "codebase",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "app-missing-return-type",
+      "summary": "Exported default export App component lacks explicit return type annotation",
+      "confidence": "medium",
+      "suggestion": "Add ': React.ReactElement' or ': JSX.Element' return type annotation to the App function definition at line 264: function App(): React.ReactElement",
+      "related_files": [
+        "src/App.tsx"
+      ],
+      "evidence": [
+        "App function at line 264 in src/App.tsx is exported as default export but has no explicit return type annotation",
+        "While inferred as JSX.Element, omitting the annotation means changes to the component's return could silently change the exported type contract"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "button-missing-return-type",
+      "summary": "Exported Button component lacks explicit return type annotation",
+      "confidence": "medium",
+      "suggestion": "Add ': React.ReactElement' or ': JSX.Element' return type annotation to the Button function",
+      "related_files": [
+        "src/components/ui/button.tsx"
+      ],
+      "evidence": [
+        "Button function at line 35 in src/components/ui/button.tsx is exported but has no explicit return type annotation"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    },
+    {
+      "dimension": "type_safety",
+      "identifier": "cn-missing-return-type",
+      "summary": "Exported cn() utility function lacks explicit return type annotation",
+      "confidence": "medium",
+      "suggestion": "Add ': string' return type annotation to the cn function: export function cn(...inputs: ClassValue[]): string",
+      "related_files": [
+        "src/lib/utils.ts"
+      ],
+      "evidence": [
+        "cn function at line 4 in src/lib/utils.ts is exported but has no explicit return type annotation"
+      ],
+      "impact_scope": "local",
+      "fix_scope": "single_edit"
+    }
+  ],
+  "review_quality": {
+    "batch_count": 20,
+    "dimension_coverage": 0.05,
+    "evidence_density": 5.329,
+    "high_score_missing_issue_note": 2
+  },
+  "context_updates": {
+    "cross_module_architecture": {
+      "add": [
+        {
+          "header": "Clean unidirectional dependency graph",
+          "description": "All imports follow a single direction (entry -> App -> UI/utils/assets) with no cycles or reverse dependencies. This makes the module boundary map trivial for any developer to trace.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "App.tsx hub module with mixed concerns",
+          "description": "407 LOC combining scene data definitions, inline JSX panels, Hero component, and scroll-driven state management. While manageable at current size, it creates a single point of change for data, layout, and interaction logic.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Well-isolated shared boundaries",
+          "description": "The cn() utility in lib/utils.ts and the Button component in components/ui/button.tsx are clean shared boundaries consumed by App.tsx, following standard UI/lib separation patterns.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "high_level_elegance": {
+      "add": [
+        {
+          "header": "Standard Vite+React structure with shadcn conventions",
+          "description": "The project follows the well-known Vite + React + TypeScript template structure with shadcn/ui directory conventions (components/ui/, lib/). This gives a predictable layout that any React developer can navigate immediately. The @ path alias is configured and used consistently across all imports.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Small focused public API surface",
+          "description": "The project exports only what is needed: App as the default root, Button/buttonVariants as the reusable UI component, and cn as the utility helper. This minimal surface is consistent with each module's stated responsibility.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "README is boilerplate scaffold not describing the project",
+          "description": "README.md was never overwritten from the Vite template. It contains generic Oxlint and React Compiler documentation but says nothing about TOB-I, robotics, the landing page purpose, or project setup. This erodes trust in the project's documentation as a reliable entry point.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Non-production inspo directory at root blurs boundaries",
+          "description": "The inspo/ directory contains downloaded external webpage assets used for visual inspiration. Its presence at the project root alongside production source files creates ambiguity about what constitutes the shipped product.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    },
+    "convention_outlier": {
+      "add": [
+        {
+          "header": "Consistent PascalCase component naming",
+          "description": "All components (App, Hero, Card, Button) consistently use PascalCase, following standard React/TypeScript convention across the entire codebase. No drift detected.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Consistent kebab-case filenames",
+          "description": "All production source files use kebab-case (button.tsx, utils.ts) or the conventional App.tsx/main.tsx. No file-naming outliers exist.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Standard Vite/React project layout",
+          "description": "The directory structure (components/ui/, lib/, assets/) follows the standard Vite + React + Tailwind boilerplate layout, providing predictable navigation for developers familiar with the ecosystem.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Quote style inconsistency between sibling modules",
+          "description": "main.tsx uses single quotes while App.tsx uses double quotes for imports. Since both files are siblings in src/, this creates a minor but visible inconsistency that suggests the files were written or formatted under different editor configurations.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Namespace React import in button.tsx",
+          "description": "button.tsx uses import * as React while all other modules use named imports from react. This is likely a carryover from a component template/snippet and creates an import style island in the components/ui directory.",
+          "settled": true,
+          "positive": false
+        }
+      ],
+      "settle": [
+        "Consistent PascalCase component naming",
+        "Consistent kebab-case filenames",
+        "Standard Vite/React project layout"
+      ]
+    },
+    "error_consistency": {
+      "add": [
+        {
+          "header": "Consistent absence of error handling",
+          "description": "All 4 modules uniformly have no error handling, which is appropriate because the codebase is a pure presentation layer with zero I/O boundaries, zero network calls, and zero user input processing. No operations in the codebase can meaningfully fail at runtime.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Zero failure-prone operations",
+          "description": "The codebase has no I/O boundaries \u2014 no file reads, network requests, parsing, or external API calls. All DOM operations are standard browser APIs in a React SPA context where failure is not a practical concern. This makes explicit error handling unnecessary.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "naming_quality": {
+      "add": [
+        {
+          "header": "PascalCase for React components, camelCase for logic",
+          "description": "Components (App, Hero, Card, Button) use PascalCase while functions and variables (handleScroll, coverProgress, activeIndex) use camelCase \u2014 following standard TypeScript/React conventions consistently across all files.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "shadcn/ui naming conventions adopted",
+          "description": "The cn utility in src/lib/utils.ts uses the abbreviated name established by the shadcn/ui ecosystem, making it immediately recognizable to developers familiar with that framework despite its terseness.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Domain-aligned scene identifiers",
+          "description": "Scene IDs use Spanish labels (costo, acceso, experiencia, tecnologia, validacion, cta) matching the page content language, which aids maintainers in mapping code to business concepts.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "abstraction_fitness": {
+      "add": [
+        {
+          "header": "Earned cn utility wrapping clsx+twMerge",
+          "description": "The cn() function in src/lib/utils.ts is the standard shadcn/ui pattern composing clsx and twMerge into a single call point. It is earned because every component file benefits from not repeating the composition, and the pattern is immediately recognized by developers familiar with the ecosystem.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Button component uses CVA for variant declaration",
+          "description": "Button component centralizes button variants and sizes via class-variance-authority (buttonVariants CVA call), avoiding repetitive inline className construction. The abstraction is earned \u2014 it simplifies usage while keeping all styling logic in one discoverable place.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Scene interface is single-implementation but provides value",
+          "description": "The Scene interface (lines 7-15 in App.tsx) defines the shape of 6 scene objects with 7 fields each, providing compile-time field validation. While there is only one implementation and no polymorphic substitution, the type safety it provides prevents malformed scene objects \u2014 it is earned ceremony rather than pure overhead.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "No problematic abstraction patterns detected",
+          "description": "The codebase has zero delegation-heavy classes, zero facade modules, zero typed dict violations, zero wide parameter bags, and zero cross-feature wrapper chains. All mechanical negative indicators are at zero, confirming the codebase avoids common abstraction pitfalls.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "dependency_health": {
+      "add": [
+        {
+          "header": "Lean dependency set for small codebase",
+          "description": "With only 4 source files (479 LOC), the dependency set is appropriate for the tech stack (React 19, Vite, Tailwind v4, shadcn/ui). The only blemish is the unused `radix-ui` umbrella package, suggesting scaffolding remnants.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "low_level_elegance": {
+      "add": [
+        {
+          "header": "Card component with focused interface",
+          "description": "Card is a clean rendering component extracted from App. Its 3-prop interface (value, label, color) maps directly to its visual output. This is a positive extraction pattern used consistently across all scene panels.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Explicit hook-based state and side effects",
+          "description": "Both App and Hero use useState for state and useEffect with proper cleanup (clearTimeout, removeEventListener). Side effects are bounded and predictable, making function internals easy to reason about.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Passive scroll listener for performance",
+          "description": "The scroll event listener in App registers with { passive: true }, indicating awareness of browser performance. This is a detail that shows attention to runtime behavior at the function level.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "cva variant pattern keeps Button rendering clean",
+          "description": "Button uses class-variance-authority to declaratively manage variant/size styles, keeping the render logic free of conditional class concatenation. The same pattern is used consistently across the component ecosystem.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Half-migrated inline styles in Hero component",
+          "description": "The Hero component mixes Tailwind utility classes with inline style props for maskImage and clamp-based positioning. This creates a dual-path styling strategy where visual intent is split across two mechanisms, increasing cognitive load when reading the function body.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Scene color values bypass CSS custom properties",
+          "description": "Six unique hex colors are hardcoded in the scenes array rather than referencing design tokens from index.css. This creates a maintenance hazard where changing a theme color requires updating both index.css and the scene hex values independently.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Inline scenes data array in App component",
+          "description": "The 184-line scenes array is embedded directly in App.tsx, mixing static data with component logic. While acceptable for a 4-file project, this pattern adds navigation overhead in the file and would benefit from extraction as the project grows.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    },
+    "mid_level_elegance": {
+      "add": [
+        {
+          "header": "Clean handoffs at existing module boundaries",
+          "description": "The few module seams that exist (main.tsx\u2192App, App\u2192Button, cn() utility) are explicit, minimal, and well-typed. Button component uses cva + Radix Slot for a clean polymorphic API. These show the team knows how to design clean boundaries when they choose to create them.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "App.tsx monolithic orchestration pattern",
+          "description": "The primary orchestrator (App.tsx at 407 LOC) mixes scroll event handling, state computation, scene data, and rendering without internal module separation. This is the dominant pattern for the app's core behavior and represents a significant gap in mid_level_elegance \u2014 the orchestrator reads as a single tangle rather than composition of collaborators.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Error propagation pattern absent codebase-wide",
+          "description": "No error boundaries, error states, or lifecycle propagation conventions exist across any module seam. This is a foundational gap \u2014 adding any new module boundary will need to establish this pattern from scratch.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    },
+    "test_strategy": {
+      "add": [
+        {
+          "header": "Complete absence of test infrastructure and coverage",
+          "description": "The codebase has zero test files, no test framework configured in package.json, and no test scripts. While the project is a small landing page (479 LOC), the core App component (407 LOC) contains complex scroll-driven state logic that would benefit from automated verification. Low-value files (main.tsx at 10 LOC, utils.ts at 6 LOC) are appropriately excluded from testing requirements per the rubric.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    },
+    "api_surface_coherence": {
+      "add": [
+        {
+          "header": "Minimal, focused public API surface",
+          "description": "Only 4 symbols exported across 3 modules (App, Button, buttonVariants, cn). Zero shape inconsistencies, zero overloaded interfaces, zero mixed sync/async. The small surface makes the codebase easy to reason about from an API coherence standpoint.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No mixed sync/async anywhere",
+          "description": "The codebase contains zero async functions. This eliminates an entire class of API coherence issues (missing awaits, accidental promise passthrough, sync/async confusion at call sites).",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "shadcn/ui idiomatic dual exports",
+          "description": "Button.tsx follows the standard shadcn/ui pattern of exporting both the component (Button) and its CVA variants config (buttonVariants). This is ecosystem-standard, not an API defect, but it does expose styling implementation detail as public surface.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "authorization_consistency": {
+      "add": [
+        {
+          "header": "Static landing page \u2014 no auth machinery present",
+          "description": "The codebase is a pure static marketing site (React + Vite + Tailwind) with zero API routes, zero server-side code, zero database access, and zero authentication/authorization patterns. This is appropriate for a brochure/landing page and means the authorization_consistency dimension evaluates to a clean slate \u2014 no inconsistencies to find because no auth exists.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "ai_generated_debt": {
+      "add": [
+        {
+          "header": "Zero restating comments in codebase",
+          "description": "The entire codebase has a comment ratio of 0.0. No function or line of code carries a restating comment. This eliminates the most common AI-generated debt pattern entirely \u2014 the code says what it does through its own structure, not through redundant annotation.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No debug logging or console noise",
+          "description": "Zero console.log/console.debug/console.warn calls exist in any production file. The absence of entry/exit logging or object dumps means the codebase avoids the LLM-hallmark pattern of nosy debug instrumentation.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No docstring bloat on trivial code",
+          "description": "Zero JSDoc or multi-line documentation comments exist. Every function is self-explanatory from its name, type signature, and implementation. This avoids the AI-hallmark pattern of verbose docstrings on trivial two-line functions.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "cn utility is standard composition, not pass-through debt",
+          "description": "The cn() function in src/lib/utils.ts composes clsx (conditional class resolution) with twMerge (Tailwind conflict merging). This is the standard shadcn/ui pattern used across thousands of React projects \u2014 it provides real value by unifying two concerns into one call site, not meaningless indirection.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "incomplete_migration": {
+      "add": [
+        {
+          "header": "Full TypeScript adoption across all source",
+          "description": "All 4 production source files are TypeScript (.tsx/.ts) with zero .js files. No mixed-language modules exist, meaning the TypeScript migration is complete. This is a positive baseline \u2014 any future code additions should maintain this invariant.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Modern React patterns throughout",
+          "description": "All components are functional with hooks (useState, useEffect, useRef) \u2014 no class components anywhere. Combined with React 19, this means no legacy lifecycle pattern debt exists. New components should follow the same pattern to keep migration debt at zero.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Zero stale migration debt",
+          "description": "No deprecated symbols, compatibility shims, stale TODOs, or dual-API coexistence patterns exist in the codebase. The project was built on a modern stack from inception, avoiding the accumulation of migration debt that plagues older codebases.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "package_organization": {
+      "add": [
+        {
+          "header": "Standard Vite+React+shadcn layout",
+          "description": "The project uses the conventional Vite+React directory structure with src/, public/, and root config files. This is immediately familiar and follows established framework patterns, reducing onboarding friction.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Clean vertical slice separation",
+          "description": "Production code is cleanly separated into lib/ (utilities), components/ui/ (reusable UI primitives), assets/ (static resources), and src/ root (entry points). Each directory has a single, clear responsibility with no mixed concerns.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Appropriate flat structure for project size",
+          "description": "With only 4 production files and 479 LOC, the flat src/ layout is appropriate and recommended by the rubric. Introducing subdirectories for a project this small would add ceremony without navigability benefit.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "initialization_coupling": {
+      "add": [
+        {
+          "header": "No import-time side effects anywhere",
+          "description": "Zero production files perform DB connections, file I/O, or network calls at module scope. This is a strong positive pattern that keeps initialization order-independent and test-friendly.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Clean acyclic import dependency graph",
+          "description": "The import chain (main.tsx -> App.tsx -> button.tsx -> utils.ts) is a simple linear tree with no cycles, hub modules, or conditional/lazy import patterns that could hide circular init dependencies.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No global mutable singletons",
+          "description": "There are no module-level mutable global objects whose creation order matters across modules. All state is component-scoped via React hooks, eliminating ordering concerns entirely.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Framework bootstrap isolated to entry point",
+          "description": "The createRoot call lives exclusively in src/main.tsx, the single framework entry point. No other module performs framework initialization, keeping boot-order predictable.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No environment variable reads at import time",
+          "description": "No production file reads process.env or import.meta.env at module scope, avoiding the common testing fragility where env-dependent initialization breaks when env vars are absent.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Module-level JSX in scenes array is benign at this scale",
+          "description": "App.tsx evaluates 6 scene objects with embedded JSX at import time (lines 28-212). While this creates React elements at module scope, the scale is small and this is standard React practice; not a coupling concern.",
+          "settled": true,
+          "positive": false
+        }
+      ]
+    },
+    "design_coherence": {
+      "add": [
+        {
+          "header": "Button component uses cva for clean variants",
+          "description": "button.tsx uses class-variance-authority to define a single buttonVariants call with variant/size axes. This is a positive pattern \u2014 variant definitions are discoverable, types are inferred, and JSX stays clean. A new team member can understand all button styles in one place.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "CSS theme tokens via custom properties",
+          "description": "index.css defines --background, --main, --border, --shadow, --radius-base, and spacing tokens as CSS custom properties with dark mode overrides. This creates a centralized visual design system that all components reference, preventing color/sizing drift across the codebase.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "App.tsx accumulates data and presentation",
+          "description": "The scenes array mixes data definition (strings, IDs) with full JSX markup (Card calls, layout divs) across 185 lines in the same file as the scroll orchestration logic and three component definitions. This is the primary design coherence concern \u2014 a new team member needs to mentally separate data, presentation, and behavior within a single 407-LOC file.",
+          "settled": false,
+          "positive": false
+        },
+        {
+          "header": "Partial color data-driven approach",
+          "description": "scene.color drives subtitle badge backgrounds but content text and hero accents use hardcoded Tailwind arbitrary values. This halfway data-driven approach adds cognitive overhead \u2014 a developer must check whether a color comes from data or is hardcoded. Complete the migration to data-driven or centralized tokens.",
+          "settled": false,
+          "positive": false
+        }
+      ]
+    },
+    "contract_coherence": {
+      "add": [
+        {
+          "header": "Clean export pattern consistency across modules",
+          "description": "Utilities and components consistently use named exports, while the root App uses a default export. This matches standard React/Vite conventions and gives consumers predictable import paths without surprise.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No hidden side effects behind getter names",
+          "description": "No functions with getX prefix exist anywhere in the codebase. State mutations are confined to directly named hooks (setShowScrollBtn, setCoverProgress, setActiveIndex) with clear intent, reinforcing contract transparency.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "TypeScript inference provides correct contracts",
+          "description": "All functions rely on TypeScript's return type inference, which correctly matches every code path. No explicit return type annotation contradicts runtime behavior, and no function silently returns null/undefined where JSX.Element is expected.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "logic_clarity": {
+      "add": [
+        {
+          "header": "Scroll-progression math is correct and explicit",
+          "description": "The cover-then-scene progression in App.tsx uses a clean two-phase mapping: cover progress = min(1, progress * (1+n)), scene index floor-mapped from the remainder. Every intermediate value is bounded with Math.max/Math.min, making the transition provably correct without off-by-one errors.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "No logic defects in the small codebase",
+          "description": "Across 4 production files (479 LOC), there are zero instances of the patterns flagged by the logic_clarity rubric: no identical branches, no dead paths, no trivial boolean simplifications, no async-wrapped-sync. The code does what it claims without unnecessary control-flow complexity.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Event lifecycle is properly managed",
+          "description": "Both useEffect hooks in App.tsx and Hero() correctly return cleanup functions (clearTimeout for timers, removeEventListener for scroll handlers). The scroll listener uses { passive: true } for performance. No stale closures or leaked listeners.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    },
+    "type_safety": {
+      "add": [
+        {
+          "header": "No unsafe type patterns in source code",
+          "description": "Despite missing strict mode, the codebase has zero 'any' annotations, zero 'as any' casts, zero '// @ts-ignore' comments, and zero '// type: ignore' comments. The developer writes types correctly by convention, even though the compiler doesn't enforce strictness.",
+          "settled": true,
+          "positive": true
+        },
+        {
+          "header": "Strict mode missing from tsconfig",
+          "description": "tsconfig.app.json omits 'strict: true', so null/undefined are silently assignable to all typed variables. This is a configuration gap rather than a code quality issue \u2014 the code itself is typed correctly, but the compiler won't catch null-safety violations. This is the single most impactful type_safety finding and the main cap on the score.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Public API functions lack return type annotations",
+          "description": "The three exported functions (App, Button, cn) all lack explicit return type annotations. While their return types are trivially inferred (JSX.Element or string), explicit annotations would make the public API contract self-documenting and prevent accidental signature drift during refactoring.",
+          "settled": true,
+          "positive": false
+        },
+        {
+          "header": "Type-only imports used correctly",
+          "description": "The codebase consistently uses the 'type' keyword for type-only imports (type VariantProps, type ReactNode, type ClassValue), which is correct for the verbatimModuleSyntax setting and avoids unnecessary runtime imports.",
+          "settled": true,
+          "positive": true
+        }
+      ]
+    }
+  },
+  "review_scope": {
+    "reviewed_files_count": 0,
+    "successful_batch_count": 20,
+    "full_sweep_included": false,
+    "total_files": 4,
+    "imported_dimensions": [
+      "abstraction_fitness",
+      "ai_generated_debt",
+      "api_surface_coherence",
+      "authorization_consistency",
+      "contract_coherence",
+      "convention_outlier",
+      "cross_module_architecture",
+      "dependency_health",
+      "design_coherence",
+      "error_consistency",
+      "high_level_elegance",
+      "incomplete_migration",
+      "initialization_coupling",
+      "logic_clarity",
+      "low_level_elegance",
+      "mid_level_elegance",
+      "naming_quality",
+      "package_organization",
+      "test_strategy",
+      "type_safety"
+    ]
+  },
+  "provenance": {
+    "kind": "blind_review_batch_import",
+    "blind": true,
+    "runner": "opencode",
+    "run_stamp": "20260630_031338",
+    "created_at": "2026-06-30T03:28:01+00:00",
+    "batch_count": 20,
+    "batch_indexes": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "packet_path": "C:\\Users\\felip\\OneDrive\\Desktop\\Tobi\\tobi-web\\.desloppify\\review_packet_blind.json",
+    "packet_sha256": "53806b968d66d8ff86e3794103852f78f6b2d63a7cfb02cadad0beee2490686e"
+  },
+  "assessment_coverage": {
+    "scored_dimensions": [
+      "naming_quality",
+      "logic_clarity",
+      "type_safety",
+      "contract_coherence",
+      "error_consistency",
+      "abstraction_fitness",
+      "ai_generated_debt",
+      "high_level_elegance",
+      "mid_level_elegance",
+      "low_level_elegance",
+      "cross_module_architecture",
+      "initialization_coupling",
+      "convention_outlier",
+      "dependency_health",
+      "test_strategy",
+      "api_surface_coherence",
+      "authorization_consistency",
+      "incomplete_migration",
+      "package_organization",
+      "design_coherence"
+    ],
+    "selected_dimensions": [
+      "naming_quality",
+      "logic_clarity",
+      "type_safety",
+      "contract_coherence",
+      "error_consistency",
+      "abstraction_fitness",
+      "ai_generated_debt",
+      "high_level_elegance",
+      "mid_level_elegance",
+      "low_level_elegance",
+      "cross_module_architecture",
+      "initialization_coupling",
+      "convention_outlier",
+      "dependency_health",
+      "test_strategy",
+      "api_surface_coherence",
+      "authorization_consistency",
+      "incomplete_migration",
+      "package_organization",
+      "design_coherence"
+    ],
+    "imported_dimensions": [
+      "abstraction_fitness",
+      "ai_generated_debt",
+      "api_surface_coherence",
+      "authorization_consistency",
+      "contract_coherence",
+      "convention_outlier",
+      "cross_module_architecture",
+      "dependency_health",
+      "design_coherence",
+      "error_consistency",
+      "high_level_elegance",
+      "incomplete_migration",
+      "initialization_coupling",
+      "logic_clarity",
+      "low_level_elegance",
+      "mid_level_elegance",
+      "naming_quality",
+      "package_organization",
+      "test_strategy",
+      "type_safety"
+    ],
+    "missing_dimensions": []
+  }
+}
