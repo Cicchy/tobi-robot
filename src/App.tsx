@@ -1,7 +1,6 @@
 import logoSrc from "./assets/logo.svg"
 import { scenes } from "./data/scenes"
 import { Hero } from "./components/hero"
-import { Header } from "./components/header"
 import { ScenePanel, SceneCenterPanel } from "./components/scene-panel"
 import { useSceneNavigation } from "./lib/use-scene-navigation"
 
@@ -11,8 +10,7 @@ function App() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <Header />
-      <div ref={sectionRef} className="relative pt-14" style={{ height: `calc(${(2 + scenes.length) * 100}vh + 56px)` }}>
+      <div ref={sectionRef} className="relative" style={{ height: `calc(${(2 + scenes.length) * 100}vh)` }}>
         <div className="sticky top-0 h-dvh z-10 bg-background">
           <Hero />
         </div>

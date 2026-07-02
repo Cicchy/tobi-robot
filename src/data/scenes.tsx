@@ -284,7 +284,6 @@ export const scenes: Scene[] = [
         body: "Buscamos inversores y partners estratégicos para escalar. TOB-I es negocio con propósito.",
         icon: "Award",
         buttons: [
-          { label: "Invertir en TOB-I", size: "sm" },
           { label: "Descargar pitch", variant: "neutral", size: "sm", href: "tobi-onepager.pdf", download: true },
         ],
       },
@@ -293,7 +292,6 @@ export const scenes: Scene[] = [
       description: "Estamos sentados sobre una mina de oro pedagógica. Tenemos el prototipo, los costos validados y un océano azul de escuelas que gritan por una solución así.",
       highlight: "Escalabilidad real con impacto social directo.",
       buttons: [
-        { label: "Invertir en TOB-I", size: "lg" },
         { label: "Descargar presentación", variant: "neutral", size: "lg", href: "tobi-onepager.pdf", download: true },
       ],
     },
