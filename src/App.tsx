@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <Header coverProgress={coverProgress} />
+      <Header />
       <div ref={sectionRef} className="relative pt-14" style={{ height: `calc(${(2 + scenes.length) * 100}vh + 56px)` }}>
         <div className="sticky top-0 h-dvh z-10 bg-background">
           <Hero />

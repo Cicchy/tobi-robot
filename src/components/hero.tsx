@@ -12,7 +12,7 @@ export function Hero() {
   }, [])
 
   return (
-    <section className="relative flex min-h-dvh items-center justify-center bg-background px-4 md:px-6">
+    <section className="relative flex min-h-dvh items-center justify-center bg-[#ECEEF1] px-4 md:px-6">
       <div className="flex w-full max-w-6xl flex-col items-center gap-6 md:flex-row md:items-center md:gap-12">
         <div className="flex flex-1 flex-col items-center text-center md:items-start md:text-left">
           <h1 className="mt-12 font-display text-5xl font-bold leading-[1.1] sm:text-6xl md:text-8xl">
