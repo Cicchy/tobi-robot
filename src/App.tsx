@@ -1,6 +1,7 @@
 import logoSrc from "./assets/logo.svg"
 import { scenes } from "./data/scenes"
 import { Hero } from "./components/hero"
+import { Header } from "./components/header"
 import { ScenePanel, SceneCenterPanel } from "./components/scene-panel"
 import { useSceneNavigation } from "./lib/use-scene-navigation"
 
@@ -10,24 +11,24 @@ function App() {
 
   return (
     <div className="flex min-h-dvh flex-col">
-      <div ref={sectionRef} className="relative" style={{ height: `${(2 + scenes.length) * 100}vh` }}>
+      <Header coverProgress={coverProgress} />
+      <div ref={sectionRef} className="relative pt-14" style={{ height: `calc(${(2 + scenes.length) * 100}vh + 56px)` }}>
         <div className="sticky top-0 h-dvh z-10 bg-background">
           <Hero />
         </div>
 
         <div
-          className="sticky top-0 h-dvh z-20 overflow-hidden"
+          className="sticky top-0 h-dvh z-20 overflow-y-auto md:overflow-hidden px-4 sm:px-6"
           style={{ transform: `translateY(${slideY}vh)`, willChange: "transform" }}
         >
-          <div className="flex h-full gap-3 rounded-base border-4 border-border bg-white p-3 shadow-shadow">
-            <ScenePanel activeIndex={activeIndex} cards={(s) => s.leftCards} scrollAnimation="scroll-down" translateOffset="0.75rem" />
+          <div className="flex h-full flex-col gap-4 overflow-y-auto rounded-base border-4 border-border bg-white p-3 shadow-shadow md:flex-row md:gap-3 md:overflow-visible md:p-5">
             <SceneCenterPanel activeIndex={activeIndex} />
-            <ScenePanel activeIndex={activeIndex} cards={(s) => s.rightCards} scrollAnimation="scroll-up" translateOffset="-0.75rem" />
+            <ScenePanel activeIndex={activeIndex} cards={(s) => [...s.leftCards, ...s.rightCards]} translateOffset="0.75rem" />
           </div>
         </div>
       </div>
 
-      <footer className="border-t-4 border-border bg-background px-6 py-8">
+      <footer className="border-t-4 border-border bg-background px-4 py-8 sm:px-6">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
           <div className="flex items-center gap-3">
             <img src={logoSrc} alt="TOB-I" className="h-6 w-auto" />

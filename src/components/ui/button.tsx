@@ -11,12 +11,12 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "text-foreground bg-main border-4 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none",
+          "text-foreground bg-[#ffeb3b] border-4 border-border shadow-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#0a0a0a] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[2px_2px_0px_0px_#0a0a0a]",
         noShadow: "text-foreground bg-main border-4 border-border",
         neutral:
-          "bg-secondary-background text-foreground border-4 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none",
+          "bg-white text-foreground border-4 border-border shadow-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#0a0a0a] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[2px_2px_0px_0px_#0a0a0a]",
         reverse:
-          "text-foreground bg-main border-4 border-border hover:translate-x-reverseBoxShadowX hover:translate-y-reverseBoxShadowY hover:shadow-shadow",
+          "text-foreground bg-[#ff4081] border-4 border-border shadow-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[6px_6px_0px_0px_#0a0a0a] active:translate-x-[4px] active:translate-y-[4px] active:shadow-[2px_2px_0px_0px_#0a0a0a]",
       },
       size: {
         default: "h-10 px-4 py-2",
