@@ -110,9 +110,15 @@ function CtaCard({ title, body, icon, buttons, color, index }: SceneCard & { col
       <p className="font-body text-sm leading-relaxed text-left text-foreground mb-3 md:text-justify md:mb-3">{body}</p>
       {buttons && (
         <div className="flex flex-wrap gap-2 mt-auto">
-          {buttons.map((btn, j) => (
-            <Button key={j} variant={btn.variant} size={btn.size ?? "sm"}>{btn.label}</Button>
-          ))}
+          {buttons.map((btn, j) =>
+            btn.href ? (
+              <a key={j} href={btn.href} download={btn.download}>
+                <Button variant={btn.variant} size={btn.size ?? "sm"}>{btn.label}</Button>
+              </a>
+            ) : (
+              <Button key={j} variant={btn.variant} size={btn.size ?? "sm"}>{btn.label}</Button>
+            )
+          )}
         </div>
       )}
     </div>
@@ -314,9 +320,15 @@ export function SceneCenterPanel({ activeIndex }: { activeIndex: number }) {
               </div>
               {scene.content.buttons && (
                 <div className="mt-4 flex flex-wrap justify-center gap-3">
-                  {scene.content.buttons.map((btn, j) => (
-                    <Button key={j} variant={btn.variant} size={btn.size}>{btn.label}</Button>
-                  ))}
+                  {scene.content.buttons.map((btn, j) =>
+                    btn.href ? (
+                      <a key={j} href={btn.href} download={btn.download}>
+                        <Button variant={btn.variant} size={btn.size}>{btn.label}</Button>
+                      </a>
+                    ) : (
+                      <Button key={j} variant={btn.variant} size={btn.size}>{btn.label}</Button>
+                    )
+                  )}
                 </div>
               )}
             </div>
@@ -340,9 +352,15 @@ export function SceneCenterPanel({ activeIndex }: { activeIndex: number }) {
                   )}
                   {scene.content.buttons && (
                     <div className="flex flex-wrap justify-center gap-3">
-                      {scene.content.buttons.map((btn, j) => (
-                        <Button key={j} variant={btn.variant} size={btn.size}>{btn.label}</Button>
-                      ))}
+                      {scene.content.buttons.map((btn, j) =>
+                        btn.href ? (
+                          <a key={j} href={btn.href} download={btn.download}>
+                            <Button variant={btn.variant} size={btn.size}>{btn.label}</Button>
+                          </a>
+                        ) : (
+                          <Button key={j} variant={btn.variant} size={btn.size}>{btn.label}</Button>
+                        )
+                      )}
                     </div>
                   )}
                 </div>

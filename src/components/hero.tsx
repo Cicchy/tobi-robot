@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { ArrowDown } from "lucide-react"
+import { ArrowDown, Download } from "lucide-react"
 import tobiImg from "../assets/tobi.png"
 
 export function Hero() {
@@ -31,7 +31,12 @@ export function Hero() {
             TOB-I es un robot cuadrúpedo programable, armable y fabricado en Argentina. Hasta 10x más barato que cualquier alternativa importada.
           </p>
 
-          <Button size="lg" className="mt-8 px-10 py-6 text-base bg-[#4285f4]">Quiero sumarme!</Button>
+          <a href="tobi-onepager.pdf" download>
+            <Button size="lg" className="mt-8 px-10 py-6 text-base bg-[#4285f4]">
+              <Download className="mr-2 h-5 w-5" />
+              Descargar one pager
+            </Button>
+          </a>
         </div>
 
         <div className="relative flex flex-1 items-end justify-center">

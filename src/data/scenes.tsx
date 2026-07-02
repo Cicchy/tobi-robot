@@ -7,13 +7,13 @@ export interface SceneCard {
   value?: string
   image?: string
   chartData?: { name: string; value: number }[]
-  buttons?: { label: string; variant?: "default" | "neutral" | "noShadow" | "reverse"; size?: "default" | "sm" | "lg" | "icon" }[]
+  buttons?: { label: string; variant?: "default" | "neutral" | "noShadow" | "reverse"; size?: "default" | "sm" | "lg" | "icon"; href?: string; download?: boolean }[]
 }
 
 export interface SceneContent {
   description: string
   highlight?: string
-  buttons?: { label: string; variant?: "default" | "neutral" | "noShadow" | "reverse"; size?: "default" | "sm" | "lg" | "icon" }[]
+  buttons?: { label: string; variant?: "default" | "neutral" | "noShadow" | "reverse"; size?: "default" | "sm" | "lg" | "icon"; href?: string; download?: boolean }[]
   media?: {
     type: "model" | "video" | "both"
     modelSrc?: string
@@ -285,7 +285,7 @@ export const scenes: Scene[] = [
         icon: "Award",
         buttons: [
           { label: "Invertir en TOB-I", size: "sm" },
-          { label: "Descargar pitch", variant: "neutral", size: "sm" },
+          { label: "Descargar pitch", variant: "neutral", size: "sm", href: "tobi-onepager.pdf", download: true },
         ],
       },
     ],
@@ -294,7 +294,7 @@ export const scenes: Scene[] = [
       highlight: "Escalabilidad real con impacto social directo.",
       buttons: [
         { label: "Invertir en TOB-I", size: "lg" },
-        { label: "Descargar presentación", variant: "neutral", size: "lg" },
+        { label: "Descargar presentación", variant: "neutral", size: "lg", href: "tobi-onepager.pdf", download: true },
       ],
     },
   },
