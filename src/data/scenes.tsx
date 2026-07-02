@@ -192,7 +192,7 @@ export const scenes: Scene[] = [
       highlight: "Accesible. Programable. Real.",
       media: {
         type: "model",
-        modelSrc: "/models/tobi.gltf",
+        modelSrc: "models/tobi.gltf",
       },
     },
   },
@@ -218,8 +218,8 @@ export const scenes: Scene[] = [
       description: "Girá el modelo 3D, exploralo desde todos los ángulos y mirá el video de Tob-ICode, nuestra plataforma de programación visual. No hace falta que nos creas, miralo con tus propios ojos.",
       media: {
         type: "video",
-        modelSrc: "/models/tobi.gltf",
-        videoSrc: "/videos/tobi-demo.mp4",
+        modelSrc: "models/tobi.gltf",
+        videoSrc: "videos/tobi-demo.mp4",
       },
     },
   },
