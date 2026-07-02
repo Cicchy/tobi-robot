@@ -19,7 +19,7 @@ export function ModelViewer({ src, className }: ModelViewerProps) {
         src,
         "auto-rotate": "",
         "camera-orbit": "45deg 55deg 2.5m",
-        orientation: "0deg 90deg 0deg",
+        orientation: "0deg -90deg 0deg",
         "interaction-prompt": "none",
         "shadow-intensity": "1",
         "ar-status": "not-presenting",
